@@ -39,6 +39,11 @@ namespace Stickies {
     private NoteSettingsDialog settingsDialog_;
 
     /// <summary>
+    /// True if we should fade the note in rather than just displaying the note.
+    /// </summary>
+    private bool fadeIn_;
+
+    /// <summary>
     /// Creates a new note. We create the Note instance in addition to loading
     /// a NoteForm with the default settings. We style the note based on the
     /// given preferences.
@@ -57,6 +62,9 @@ namespace Stickies {
       textBox_.BackColor = Color.FromArgb(mainForm.Preferences.Note.BackColor);
       this.Opacity = 1.0 - mainForm.Preferences.Note.Transparency;
       textBox_.Rtf = mainForm.Preferences.Note.Rtf;
+
+      // Fade in since this is a new note
+      fadeIn_ = true;
 
       // Don't lock the note since it is a new note
       UpdateTitle();
@@ -136,7 +144,17 @@ namespace Stickies {
     /// this NoteForm window.
     /// </summary>
     public void Delete() {
+      Delete(true);
+    }
+
+    /// <summary>
+    /// Deletes this note, fading the note out if fade is true.
+    /// </summary>
+    public void Delete(bool fade) {
       timer_.Stop();
+      if (fade) {
+        WinUser.AnimateWindow(this.Handle, 350, WinUser.AW_BLEND | WinUser.AW_HIDE);
+      }
       note_.Delete();
       note_ = null;
       this.Close();
@@ -295,6 +313,18 @@ namespace Stickies {
         settingsDialog_.Show();
       } else {
         settingsDialog_.Activate();
+      }
+    }
+
+    /// <summary>
+    /// Fades the note in if fadeIn_ is true.
+    /// </summary>
+    private void NoteForm_Load(object sender, EventArgs e) {
+      if (fadeIn_) {
+        Color backColor = this.BackColor;
+        this.BackColor = textBox_.BackColor;
+        WinUser.AnimateWindow(this.Handle, 350, WinUser.AW_BLEND);
+        this.BackColor = backColor;
       }
     }
 
