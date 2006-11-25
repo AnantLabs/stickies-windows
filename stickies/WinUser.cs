@@ -12,6 +12,8 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+using System.Runtime.InteropServices;
+
 namespace Stickies {
   /// <summary>
   /// Reproductions of constants from winuser.h.
@@ -54,6 +56,27 @@ namespace Stickies {
     public const int HTBOTTOMRIGHT = 17;
     public const int HTBORDER = 18;
 
+    public const int AW_HOR_POSITIVE = 0x00000001;
+    public const int AW_HOR_NEGATIVE = 0x00000002;
+    public const int AW_VER_POSITIVE = 0x00000004;
+    public const int AW_VER_NEGATIVE = 0x00000008;
+    public const int AW_CENTER = 0x00000010;
+    public const int AW_HIDE = 0x00010000;
+    public const int AW_ACTIVATE = 0x00020000;
+    public const int AW_SLIDE = 0x00040000;
+    public const int AW_BLEND = 0x00080000;
+
+    /// <summary>
+    /// Animates a window to show or hide it. See the MSDN documentation:
+    /// http://msdn.microsoft.com/library/en-us/winui/winui/windowsuserinterface/windowing/windows/windowreference/windowfunctions/animatewindow.asp
+    /// </summary>
+    [DllImport("User32.dll")]
+    public static extern int AnimateWindow(System.IntPtr hwnd, int dwTime, int dwFlags);
+
+    /// <summary>
+    /// Converts an LParam representing a Point to a C# point. Equivalent
+    /// to the standard LPARAM macros in winuser.h
+    /// </summary>
     public static System.Drawing.Point LParamToPoint(System.IntPtr lParam) {
       long lParam64 = lParam.ToInt64();
       return new System.Drawing.Point((int) (lParam64 & 0x0000FFFF),

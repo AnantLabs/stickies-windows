@@ -194,7 +194,7 @@ namespace Stickies {
       NoteForm[] notes = new NoteForm[noteForms_.Count];
       noteForms_.CopyTo(notes);
       foreach (NoteForm noteForm in notes) {
-        noteForm.Delete();
+        noteForm.Delete(false);
       }
     }
 

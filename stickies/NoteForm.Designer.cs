@@ -90,6 +90,7 @@ namespace Stickies {
       this.Padding = new System.Windows.Forms.Padding(2, 11, 2, 2);
       this.ShowInTaskbar = false;
       this.Deactivate += new System.EventHandler(this.NoteForm_Deactivate);
+      this.Load += new System.EventHandler(this.NoteForm_Load);
       this.contextMenu_.ResumeLayout(false);
       this.ResumeLayout(false);
 
