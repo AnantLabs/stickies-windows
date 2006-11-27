@@ -69,11 +69,23 @@ namespace Stickies {
     public int BackColor;
 
     /// <summary>
+    /// The foreground color (font color) of this note.
+    /// </summary>
+    [DefaultValue(0)]
+    public int FontColor;
+
+    /// <summary>
     /// The level of transparency of this note. 0.0 indicates completely
     /// opaque, and 1.0 indicates completely invisible.
     /// </summary>
     [DefaultValue(0.0)]
     public double Transparency;
+
+    /// <summary>
+    /// True if the note should remain all other windows on the desktop.
+    /// </summary>
+    [DefaultValue(false)]
+    public bool AlwaysOnTop;
 
     /// <summary>
     /// Creates a new note without a GUID. This should only be used by the

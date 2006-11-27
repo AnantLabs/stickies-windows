@@ -12,6 +12,7 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace Stickies {
@@ -21,8 +22,10 @@ namespace Stickies {
   class WinUser {
     public const int WM_SETFOCUS = 0x0007;
     public const int WM_KILLFOCUS = 0x0008;
-
+    public const int WM_WINDOWPOSCHANGING = 0x0046;
+    public const int WM_WINDOWPOSCHANGED = 0x0047;
     public const int WM_NCHITTEST = 0x0084;
+    public const int WM_HOTKEY = 0x0312;
     public const int WM_NCLBUTTONDOWN = 0x00A1;
     public const int WM_NCLBUTTONUP = 0x00A2;
     public const int WM_NCLBUTTONDBLCLK = 0x00A3;
@@ -32,6 +35,7 @@ namespace Stickies {
     public const int WM_NCMBUTTONDOWN = 0x00A7;
     public const int WM_NCMBUTTONUP = 0x00A8;
     public const int WM_NCMBUTTONDBLCLK = 0x00A9;
+    public const int WM_USER = 0x0400;
 
     public const int HTERROR = -2;
     public const int HTTRANSPARENT = -1;
@@ -66,12 +70,36 @@ namespace Stickies {
     public const int AW_SLIDE = 0x00040000;
     public const int AW_BLEND = 0x00080000;
 
-    /// <summary>
-    /// Animates a window to show or hide it. See the MSDN documentation:
-    /// http://msdn.microsoft.com/library/en-us/winui/winui/windowsuserinterface/windowing/windows/windowreference/windowfunctions/animatewindow.asp
-    /// </summary>
+    public const int MOD_ALT = 1;
+    public const int MOD_CONTROL = 2;
+    public const int MOD_SHIFT = 4;
+    public const int MOD_WIN = 8;
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr FindWindow(String className, String title);
+ 
+    [DllImport("user32.dll")]
+    public static extern IntPtr PostMessage(IntPtr hWnd, IntPtr msg, IntPtr wParam, IntPtr lParam);
+
     [DllImport("User32.dll")]
-    public static extern int AnimateWindow(System.IntPtr hwnd, int dwTime, int dwFlags);
+    public static extern int AnimateWindow(IntPtr hwnd, int dwTime, int dwFlags);
+
+    [DllImport("User32.dll")]
+    public static extern int RegisterHotKey(IntPtr hwnd, int id, int fsModifiers, int vk);
+
+    [DllImport("User32.dll", SetLastError = true)]
+    public static extern int UnregisterHotKey(IntPtr hwnd, int id);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WINDOWPOS {
+      public IntPtr hwnd;
+      public IntPtr hwndInsertAfter;
+      public int x;
+      public int y;
+      public int cx;
+      public int cy;
+      public int flags;
+    }
 
     /// <summary>
     /// Converts an LParam representing a Point to a C# point. Equivalent

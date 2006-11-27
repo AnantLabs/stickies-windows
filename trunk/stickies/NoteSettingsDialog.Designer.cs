@@ -38,14 +38,15 @@ namespace Stickies {
       this.notePreferencesControl_.NoteFont = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
       this.notePreferencesControl_.NoteFontColor = System.Drawing.SystemColors.ControlText;
       this.notePreferencesControl_.NoteTransparency = 0;
-      this.notePreferencesControl_.Size = new System.Drawing.Size(190, 154);
+      this.notePreferencesControl_.Size = new System.Drawing.Size(190, 174);
+      this.notePreferencesControl_.SliderBarBackColor = System.Drawing.SystemColors.Control;
       this.notePreferencesControl_.TabIndex = 0;
       // 
       // NoteSettingsDialog
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(210, 174);
+      this.ClientSize = new System.Drawing.Size(210, 194);
       this.Controls.Add(this.notePreferencesControl_);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
       this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));

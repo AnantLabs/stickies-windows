@@ -24,43 +24,37 @@ namespace Stickies {
     /// </summary>
     private void InitializeComponent() {
       this.components = new System.ComponentModel.Container();
-      System.Windows.Forms.ToolStripMenuItem deleteMenuItem_;
-      System.Windows.Forms.ToolStripMenuItem preferencesMenuItem_;
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NoteForm));
-      this.timer_ = new System.Windows.Forms.Timer(this.components);
+      this.deleteMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
+      this.preferencesMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
       this.contextMenu_ = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.textBox_ = new Stickies.NoteTextBox();
-      deleteMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
-      preferencesMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
       this.contextMenu_.SuspendLayout();
       this.SuspendLayout();
       // 
       // deleteMenuItem_
       // 
-      deleteMenuItem_.Name = "deleteMenuItem_";
-      deleteMenuItem_.Size = new System.Drawing.Size(143, 22);
-      deleteMenuItem_.Text = "&Delete";
-      deleteMenuItem_.Click += new System.EventHandler(this.deleteMenuItem__Click);
+      this.deleteMenuItem_.Name = "deleteMenuItem_";
+      this.deleteMenuItem_.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+      this.deleteMenuItem_.Size = new System.Drawing.Size(181, 22);
+      this.deleteMenuItem_.Text = "&Delete";
+      this.deleteMenuItem_.Click += new System.EventHandler(this.deleteMenuItem__Click);
       // 
       // preferencesMenuItem_
       // 
-      preferencesMenuItem_.Name = "preferencesMenuItem_";
-      preferencesMenuItem_.Size = new System.Drawing.Size(143, 22);
-      preferencesMenuItem_.Text = "&Preferences";
-      preferencesMenuItem_.Click += new System.EventHandler(this.preferencesMenuItem__Click);
-      // 
-      // timer_
-      // 
-      this.timer_.Interval = 5000;
-      this.timer_.Tick += new System.EventHandler(this.timer_Tick);
+      this.preferencesMenuItem_.Name = "preferencesMenuItem_";
+      this.preferencesMenuItem_.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+      this.preferencesMenuItem_.Size = new System.Drawing.Size(181, 22);
+      this.preferencesMenuItem_.Text = "&Preferences";
+      this.preferencesMenuItem_.Click += new System.EventHandler(this.preferencesMenuItem__Click);
       // 
       // contextMenu_
       // 
       this.contextMenu_.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            preferencesMenuItem_,
-            deleteMenuItem_});
+            this.preferencesMenuItem_,
+            this.deleteMenuItem_});
       this.contextMenu_.Name = "contextMenu_";
-      this.contextMenu_.Size = new System.Drawing.Size(144, 48);
+      this.contextMenu_.Size = new System.Drawing.Size(182, 70);
       // 
       // textBox_
       // 
@@ -75,6 +69,10 @@ namespace Stickies {
       this.textBox_.TabIndex = 1;
       this.textBox_.Text = "";
       this.textBox_.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox__KeyDown);
+      this.textBox_.FontChanged += new System.EventHandler(this.MakeDirty);
+      this.textBox_.TextChanged += new System.EventHandler(this.MakeDirty);
+      this.textBox_.BackColorChanged += new System.EventHandler(this.MakeDirty);
+      this.textBox_.ForeColorChanged += new System.EventHandler(this.MakeDirty);
       // 
       // NoteForm
       // 
@@ -90,6 +88,9 @@ namespace Stickies {
       this.Padding = new System.Windows.Forms.Padding(2, 11, 2, 2);
       this.ShowInTaskbar = false;
       this.Deactivate += new System.EventHandler(this.NoteForm_Deactivate);
+      this.Resize += new System.EventHandler(this.MakeDirty);
+      this.Move += new System.EventHandler(this.MakeDirty);
+      this.BackColorChanged += new System.EventHandler(this.MakeDirty);
       this.Load += new System.EventHandler(this.NoteForm_Load);
       this.contextMenu_.ResumeLayout(false);
       this.ResumeLayout(false);
@@ -98,8 +99,9 @@ namespace Stickies {
 
     #endregion
 
-    private System.Windows.Forms.Timer timer_;
     private System.Windows.Forms.ContextMenuStrip contextMenu_;
     private NoteTextBox textBox_;
+    private System.Windows.Forms.ToolStripMenuItem preferencesMenuItem_;
+    private System.Windows.Forms.ToolStripMenuItem deleteMenuItem_;
   }
 }

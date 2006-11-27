@@ -14,6 +14,7 @@
 
 using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Stickies {
@@ -22,7 +23,7 @@ namespace Stickies {
   /// single Note instance that represents the Note on disk.  As the user makes
   /// changes to this NoteForm, we perodically serialize the Note to disk.
   /// </summary>
-  public partial class NoteForm : Form {
+  public partial class NoteForm : ContainedForm {
     /// <summary>
     /// The Note instance associated with this NoteForm
     /// </summary>
@@ -39,48 +40,34 @@ namespace Stickies {
     private NoteSettingsDialog settingsDialog_;
 
     /// <summary>
-    /// True if we should fade the note in rather than just displaying the note.
+    /// The length of our fade-in/out in milliseconds.
     /// </summary>
-    private bool fadeIn_;
+    private const int FadeTime = 300;
 
     /// <summary>
-    /// Creates a new note. We create the Note instance in addition to loading
-    /// a NoteForm with the default settings. We style the note based on the
-    /// given preferences.
+    /// True if we have changed since our last save to disk.
     /// </summary>
-    public NoteForm(MainForm mainForm) {
-      mainForm_ = mainForm;
+    private bool dirty_;
 
-      // Create a note with a new GUID
-      note_ = new Note(Guid.NewGuid());
-
-      // Load the settings from the default note settings in the preferences
-      InitializeComponent();
-      this.StartPosition = FormStartPosition.WindowsDefaultLocation;
-      this.Size = new Size(mainForm.Preferences.Note.Width, mainForm.Preferences.Note.Height);
-      this.BackColor = Color.FromArgb(mainForm.Preferences.Note.BorderColor);
-      textBox_.BackColor = Color.FromArgb(mainForm.Preferences.Note.BackColor);
-      this.Opacity = 1.0 - mainForm.Preferences.Note.Transparency;
-      textBox_.Rtf = mainForm.Preferences.Note.Rtf;
-
-      // Fade in since this is a new note
-      fadeIn_ = true;
-
-      // Don't lock the note since it is a new note
-      UpdateTitle();
-      timer_.Start();
-    }
+    /// <summary>
+    /// True if the user gave the fadeIn option in the constructor.
+    /// </summary>
+    private bool fadeIn_;
 
     /// <summary>
     /// Creates a NoteForm for the given Note instance. We load our settings
     /// from the given Note instance, and we bind ourselves to the instance,
     /// so as the user changes this NoteForm, we serialize the changes in the
-    /// given Note.
+    /// given Note. If fadeIn is true, we fade the note in rather than just
+    /// showing it.
     /// </summary>
-    public NoteForm(MainForm mainForm, Note note) {
+    public NoteForm(MainForm mainForm, Note note, bool fadeIn) {
       mainForm_ = mainForm;
       note_ = note;
+      fadeIn_ = fadeIn;
       InitializeComponent();
+      preferencesMenuItem_.Text = Messages.NotePreferences;
+      deleteMenuItem_.Text = Messages.NoteDelete;
 
       // Load the settings from the Note instance
       this.StartPosition = FormStartPosition.Manual;
@@ -88,13 +75,17 @@ namespace Stickies {
       this.Size = new Size(note.Width, note.Height);
       this.BackColor = Color.FromArgb(note.BorderColor);
       textBox_.BackColor = Color.FromArgb(note.BackColor);
+      textBox_.ForeColor = Color.FromArgb(note.FontColor);
       textBox_.Rtf = note.Rtf;
-      this.Opacity = 1.0 - note.Transparency;
+      this.TopMost = note.AlwaysOnTop;
+      this.Opacity = 1.0 - note_.Transparency;
 
       // Lock this note initially since it is not a new note
       Lock();
       UpdateTitle();
-      timer_.Start();
+
+      // We are not dirty since the note just loaded
+      dirty_ = false;
     }
 
     /// <summary>
@@ -123,20 +114,22 @@ namespace Stickies {
     /// </summary>
     public void Save() {
       if (note_ == null) return;
-      System.Diagnostics.Debug.WriteLine("Saving note " + note_.Guid);
       note_.Left = this.Left;
       note_.Top = this.Top;
       note_.Width = this.Width;
       note_.Height = this.Height;
       note_.Transparency = 1.0 - this.Opacity;
-      note_.Rtf = textBox_.Rtf;
+      note_.FontColor = textBox_.ForeColor.ToArgb();
       note_.BackColor = textBox_.BackColor.ToArgb();
       note_.BorderColor = this.BackColor.ToArgb();
+      note_.AlwaysOnTop = this.TopMost;
+      note_.Rtf = textBox_.Rtf;
       try {
         note_.Save();
       } catch (Exception e) {
         mainForm_.ShowError(String.Format(Messages.ErrorNoteSave, e.Message));
       }
+      dirty_ = false;
     }
 
     /// <summary>
@@ -151,9 +144,12 @@ namespace Stickies {
     /// Deletes this note, fading the note out if fade is true.
     /// </summary>
     public void Delete(bool fade) {
-      timer_.Stop();
-      if (fade) {
-        WinUser.AnimateWindow(this.Handle, 350, WinUser.AW_BLEND | WinUser.AW_HIDE);
+      if (fade && this.Opacity == 1.0) {
+        // When we fade out, Windows only shows the background of the form, not
+        // the controls, so we make our background color the color of our text
+        // box so the fade looks correct
+        this.BackColor = textBox_.BackColor;
+        WinUser.AnimateWindow(this.Handle, FadeTime, WinUser.AW_BLEND | WinUser.AW_HIDE);
       }
       note_.Delete();
       note_ = null;
@@ -176,11 +172,11 @@ namespace Stickies {
       textBox_.Locked = false;
     }
 
-    #region Win32 WM_NCHITTEST
-
-    // Returns the proper WM_NCHITTEST result so that the corners of of our
-    // window can perform resizes and the title bar can act as a draggable
-    // title bar.
+    /// <summary>
+    /// Returns the proper WM_NCHITTEST result so that the corners of of our
+    /// window can perform resizes and the title bar can act as a draggable
+    /// title bar.
+    /// </summary>
     private int OnNcHitTest(Point p) {
       if (p.Y < this.Padding.Top) {
         if (p.X < this.Padding.Left) {
@@ -219,8 +215,10 @@ namespace Stickies {
       return WinUser.HTCAPTION;
     }
 
-    // Capture the WM_NCHITTEST message and associated messages so we can make
-    // our borderless window draggable and resizable.
+    /// <summary>
+    /// Capture the WM_NCHITTEST message and associated messages so we can make
+    /// our borderless window draggable and resizable.
+    /// </summary>
     protected override void WndProc(ref Message m) {
       switch (m.Msg) {
         case WinUser.WM_NCHITTEST:
@@ -247,20 +245,6 @@ namespace Stickies {
       }
     }
 
-    #endregion
-
-    /// <summary>
-    /// The timer ticks periodically, and we update our title and save the Note.
-    /// </summary>
-    private void timer_Tick(object sender, EventArgs e) {
-      if (note_.Rtf != textBox_.Rtf || this.Left != note_.Left ||
-          this.Top != note_.Top || this.Width != note_.Width ||
-          this.Height != note_.Height) {
-        Save();
-        UpdateTitle();
-      }
-    }
-
     /// <summary>
     /// Deletes this note.
     /// </summary>
@@ -275,7 +259,9 @@ namespace Stickies {
     /// </summary>
     private void NoteForm_Deactivate(object sender, EventArgs e) {
       Lock();
-      Save();
+      if (dirty_) {
+        Save();
+      }
       UpdateTitle();
     }
 
@@ -292,6 +278,20 @@ namespace Stickies {
     }
 
     /// <summary>
+    /// Called by a number of event handlers that change the state of our note.
+    /// We use this in the Save() method to determine whether we should execute
+    /// the save or note.
+    /// </summary>
+    private void MakeDirty(object sender, EventArgs e) {
+      // Checking for Visible ensures we will only make our note "dirty" after
+      // the initial form has been loaded, which ensures the dirty bit will
+      // only be changed when the user makes changes
+      if (this.Visible) {
+        dirty_ = true;
+      }
+    }
+
+    /// <summary>
     /// Create a preferences form initialized with our settings and display it.
     /// We don't make it a dialog box so that the user can edit and resize their
     /// note as they change preferences, but we only show one preferences form
@@ -303,28 +303,18 @@ namespace Stickies {
         settingsDialog_.PreferencesControl.NoteBackgroundColor = textBox_.BackColor;
         settingsDialog_.PreferencesControl.NoteBorderColor = this.BackColor;
         settingsDialog_.PreferencesControl.NoteFont = textBox_.SelectionFont;
-        settingsDialog_.PreferencesControl.NoteFontColor = textBox_.ForeColor;
+        settingsDialog_.PreferencesControl.NoteFontColor = textBox_.SelectionColor;
         settingsDialog_.PreferencesControl.NoteTransparency = 1.0 - this.Opacity;
+        settingsDialog_.PreferencesControl.NoteAlwaysOnTop = this.TopMost;
         settingsDialog_.PreferencesControl.NoteBackgroundColorChanged += new NotePreferencesControl.NotePreferencesHandler(settingsDialog__NoteBackgroundColorChanged);
         settingsDialog_.PreferencesControl.NoteBorderColorChanged += new NotePreferencesControl.NotePreferencesHandler(settingsDialog__NoteBorderColorChanged);
         settingsDialog_.PreferencesControl.NoteFontChanged += new NotePreferencesControl.NotePreferencesHandler(settingsDialog__NoteFontChanged);
         settingsDialog_.PreferencesControl.NoteFontColorChanged += new NotePreferencesControl.NotePreferencesHandler(settingsDialog__NoteFontColorChanged);
         settingsDialog_.PreferencesControl.NoteTransparencyChanged += new NotePreferencesControl.NotePreferencesHandler(settingsDialog__NoteTransparencyChanged);
+        settingsDialog_.PreferencesControl.NoteAlwaysOnTopChanged += new NotePreferencesControl.NotePreferencesHandler(settingsDialog__NoteAlwaysOnTopChanged);
         settingsDialog_.Show();
       } else {
         settingsDialog_.Activate();
-      }
-    }
-
-    /// <summary>
-    /// Fades the note in if fadeIn_ is true.
-    /// </summary>
-    private void NoteForm_Load(object sender, EventArgs e) {
-      if (fadeIn_) {
-        Color backColor = this.BackColor;
-        this.BackColor = textBox_.BackColor;
-        WinUser.AnimateWindow(this.Handle, 350, WinUser.AW_BLEND);
-        this.BackColor = backColor;
       }
     }
 
@@ -346,6 +336,33 @@ namespace Stickies {
 
     void settingsDialog__NoteBackgroundColorChanged() {
       textBox_.BackColor = settingsDialog_.PreferencesControl.NoteBackgroundColor;
+    }
+
+    void settingsDialog__NoteAlwaysOnTopChanged() {
+      this.TopMost = settingsDialog_.PreferencesControl.NoteAlwaysOnTop;
+    }
+
+    /// <summary>
+    /// Fade in and focus the text box if it is empty for easy editing.
+    /// </summary>
+    private void NoteForm_Load(object sender, EventArgs e) {
+      // Fade the note in. We cannot fade in if the form is transparent because
+      // Windows is retarded.
+      if (fadeIn_ && this.Opacity == 1.0) {
+        // When we fade in, Windows only shows the background of the form, not
+        // the controls, so we make our background color the color of our text
+        // box so the fade looks correct
+        Color oldBackColor = this.BackColor;
+        this.BackColor = textBox_.BackColor;
+        WinUser.AnimateWindow(this.Handle, FadeTime, WinUser.AW_BLEND);
+        this.BackColor = oldBackColor;
+      }
+
+      // Focus on the text box if this is a new/un-edited note
+      if (textBox_.Text.Length == 0) {
+        this.Unlock();
+        textBox_.Focus();
+      }
     }
   }
 }
