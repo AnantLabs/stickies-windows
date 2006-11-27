@@ -115,6 +115,15 @@ namespace Stickies {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was an error loading your custom Stickies icon. {0}.
+        /// </summary>
+        internal static string ErrorIconLoad {
+            get {
+                return ResourceManager.GetString("ErrorIconLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There was an error loading one of your sticky notes. {0}.
         /// </summary>
         internal static string ErrorNoteLoad {
@@ -223,11 +232,38 @@ namespace Stickies {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stickies is already running. Double click this icon to create a new sticky note..
+        /// </summary>
+        internal static string MessageStickiesAlreadyOpen {
+            get {
+                return ResourceManager.GetString("MessageStickiesAlreadyOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Delete.
+        /// </summary>
+        internal static string NoteDelete {
+            get {
+                return ResourceManager.GetString("NoteDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;New Sticky Note&gt;.
         /// </summary>
         internal static string NoteNewStickyNote {
             get {
                 return ResourceManager.GetString("NoteNewStickyNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note &amp;Settings.
+        /// </summary>
+        internal static string NotePreferences {
+            get {
+                return ResourceManager.GetString("NotePreferences", resourceCulture);
             }
         }
         
@@ -259,6 +295,78 @@ namespace Stickies {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose {0} Icon.
+        /// </summary>
+        internal static string PreferencesIconFileDialog {
+            get {
+                return ResourceManager.GetString("PreferencesIconFileDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remain on top of other windows.
+        /// </summary>
+        internal static string PreferencesNoteAlwaysOnTop {
+            get {
+                return ResourceManager.GetString("PreferencesNoteAlwaysOnTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Background color.
+        /// </summary>
+        internal static string PreferencesNoteBackgroundColor {
+            get {
+                return ResourceManager.GetString("PreferencesNoteBackgroundColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Border color.
+        /// </summary>
+        internal static string PreferencesNoteBorderColor {
+            get {
+                return ResourceManager.GetString("PreferencesNoteBorderColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change.
+        /// </summary>
+        internal static string PreferencesNoteChange {
+            get {
+                return ResourceManager.GetString("PreferencesNoteChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Font.
+        /// </summary>
+        internal static string PreferencesNoteFont {
+            get {
+                return ResourceManager.GetString("PreferencesNoteFont", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invisble (100%).
+        /// </summary>
+        internal static string PreferencesNoteInvisible {
+            get {
+                return ResourceManager.GetString("PreferencesNoteInvisible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opaque (0%).
+        /// </summary>
+        internal static string PreferencesNoteOpaque {
+            get {
+                return ResourceManager.GetString("PreferencesNoteOpaque", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set your font and color preferences using the buttons to the right..
         /// </summary>
         internal static string PreferencesNoteText {
@@ -268,11 +376,29 @@ namespace Stickies {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save Preferences.
+        ///   Looks up a localized string similar to Transparency.
+        /// </summary>
+        internal static string PreferencesNoteTransparency {
+            get {
+                return ResourceManager.GetString("PreferencesNoteTransparency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Changes.
         /// </summary>
         internal static string PreferencesSave {
             get {
                 return ResourceManager.GetString("PreferencesSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application Settings.
+        /// </summary>
+        internal static string PreferencesSettingsTab {
+            get {
+                return ResourceManager.GetString("PreferencesSettingsTab", resourceCulture);
             }
         }
         

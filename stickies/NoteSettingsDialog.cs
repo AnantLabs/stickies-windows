@@ -50,18 +50,9 @@ namespace Stickies {
     /// of the NoteForm we are associated with.
     /// </summary>
     private Point DeterminePosition() {
-      // Determine the total bounds of all of the user's screens
-      Rectangle screenBounds = Screen.PrimaryScreen.Bounds;
-      foreach (Screen screen in Screen.AllScreens) {
-        int left = Math.Min(screen.Bounds.Left, screenBounds.Left);
-        int top = Math.Min(screen.Bounds.Top, screenBounds.Top);
-        int right = Math.Max(screen.Bounds.Right, screenBounds.Right);
-        int bottom = Math.Max(screen.Bounds.Bottom, screenBounds.Bottom);
-        screenBounds = new Rectangle(left, top, right - left, bottom - top);
-      }
-
       // Always position the form to the right of the note if it fits.
       // Otherwise, position us on the right hand side.
+      Rectangle screenBounds = Screen.FromControl(this).WorkingArea;
       int x = noteForm_.Bounds.Right;
       if (noteForm_.Bounds.Right + this.Bounds.Width > screenBounds.Width) {
         x = noteForm_.Bounds.Left - this.Bounds.Width;
@@ -100,7 +91,9 @@ namespace Stickies {
     /// Move ourselves when our note moves.
     /// </summary>
     void noteForm__Changed(object sender, EventArgs e) {
-      this.Location = DeterminePosition();
+      if (this.Visible) {
+        this.Location = DeterminePosition();
+      }
     }
   }
 }

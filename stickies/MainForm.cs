@@ -13,6 +13,7 @@
 // under the License.
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
@@ -48,11 +49,21 @@ namespace Stickies {
     private Preferences preferences_;
 
     /// <summary>
-    /// If set, we take the user to this URL when he or she clicks the
-    /// balloon tip above our tray icon. We reset this to null every time
-    /// the balloon closes.
+    /// The global hotkey ID we use to register our Windows hotkey.
     /// </summary>
-    private string balloonClickUrl_;
+    private const int kHotkeyId = 0x1;
+
+    /// <summary>
+    /// The title we use for our (invisible) Window, which is useful to know
+    /// for sending messages to this window from other processes.
+    /// </summary>
+    public static string WindowTitle = Application.ProductName + " " + Application.ProductVersion;
+
+    /// <summary>
+    /// The Windows message that we should send to this window when the user
+    /// tries to open stickies after it is already open.
+    /// </summary>
+    public const int WM_STICKIES_REOPEN = WinUser.WM_USER + 1;
 
     /// <summary>
     /// Load our preferences from disk, set up our tray icon, and load all of
@@ -71,20 +82,23 @@ namespace Stickies {
       exitMenuItem_.Text = Messages.MainExit;
       notifyIcon_.Text = Application.ProductName;
 
-      // Load the preferences and notes from disk
+      // Name our window so we can find it via inter-process communication
+      this.Text = WindowTitle;
+
+      // Load the preferences from disk
       preferences_ = LoadPreferences();
+      ReloadPreferences();
+
+      // Load the notes from disk
       noteForms_ = new List<NoteForm>();
       List<Note> notes = LoadNotes();
       foreach (Note note in notes) {
-        ShowNote(new NoteForm(this, note));
+        ShowNote(new NoteForm(this, note, false));
       }
       UpdateMenus();
 
-      // Start an asynchronous request to check for a more recent version of
-      // the product
-      string updateCheckUrl = String.Format(Messages.UpdateCheckUrl, Application.ProductVersion);
-      UpdateChecker checker = new UpdateChecker(updateCheckUrl, OnVersionCheck);
-      checker.Run();
+      // Register a global hot-key to create new sticky notes
+      RegisterGlobalHotKey();
     }
 
     /// <summary>
@@ -110,21 +124,6 @@ namespace Stickies {
     public void ShowMessage(string message) {
       notifyIcon_.ShowBalloonTip(7000, Application.ProductName, message,
                                  ToolTipIcon.Info);
-    }
-
-    /// <summary>
-    /// Called when the version checker has downloaded the version information
-    /// from the Stickies web server. We display an update message if the
-    /// version reported by the web server is different than this application's
-    /// version.
-    /// </summary>
-    private void OnVersionCheck(VersionInfo versionInfo) {
-      Debug.WriteLine("This application's version: " + Application.ProductVersion);
-      Debug.WriteLine("Current application version: " + versionInfo.CurrentVersion);
-      if (versionInfo.CurrentVersion != Application.ProductVersion) {
-        ShowMessage(versionInfo.UpdateMessage);
-        balloonClickUrl_ = versionInfo.UpdateUrl;
-      }
     }
 
     /// <summary>
@@ -208,6 +207,69 @@ namespace Stickies {
     }
 
     /// <summary>
+    /// Creates a new note under the current mouse position.
+    /// </summary>
+    private void NewNote() {
+      Note note = (Note) preferences_.Note.Copy();
+      note.Guid = Guid.NewGuid().ToString();
+      note.Left = Control.MousePosition.X - note.Width / 2;
+      note.Top = Control.MousePosition.Y - note.Height / 2;
+      NoteForm noteForm = new NoteForm(this, note, true);
+      ShowNote(noteForm);
+      noteForm.Activate();
+    }
+
+    /// <summary>
+    /// Loads the changes from the current set of preferences.
+    /// </summary>
+    private void ReloadPreferences() {
+      if (preferences_.TrayIconPath != null) {
+        try {
+          notifyIcon_.Icon = new System.Drawing.Icon(preferences_.TrayIconPath);
+        } catch (Exception e) {
+          ShowError(String.Format(Messages.ErrorIconLoad, e.Message));
+        }
+      } else {
+        ComponentResourceManager resources = new ComponentResourceManager(typeof(MainForm));
+        notifyIcon_.Icon = (System.Drawing.Icon) resources.GetObject("notifyIcon_.Icon");
+      }
+    }
+
+    /// <summary>
+    /// Registers a global Windows hot key to create new sticky notes.
+    /// </summary>
+    private void RegisterGlobalHotKey() {
+      if (WinUser.RegisterHotKey(this.Handle, kHotkeyId, WinUser.MOD_CONTROL | WinUser.MOD_SHIFT, (int) Keys.N) == 0) {
+        System.Diagnostics.Debug.WriteLine("RegisterHotKey failed");
+      }
+    }
+
+    /// <summary>
+    /// Unregisters our global Windows hot key.
+    /// </summary>
+    private void UnregisterGlobalHotKey() {
+      WinUser.UnregisterHotKey(this.Handle, kHotkeyId);
+    }
+
+    /// <summary>
+    /// Handle our global Windows hot key.
+    /// </summary>
+    /// <param name="m"></param>
+    protected override void WndProc(ref Message m) {
+      switch (m.Msg) {
+        case WinUser.WM_HOTKEY:
+          NewNote();
+          break;
+        case WM_STICKIES_REOPEN:
+          ShowMessage(Messages.MessageStickiesAlreadyOpen);
+          break;
+        default:
+          base.WndProc(ref m);
+          break;
+      }
+    }
+
+    /// <summary>
     /// Called when a NoteForm closes. We removed the NoteForm from our
     /// collection when it is closed.
     /// </summary>
@@ -220,7 +282,7 @@ namespace Stickies {
     /// Creates and registers a new note.
     /// </summary>
     private void newNoteMenuItem__Click(object sender, EventArgs e) {
-      ShowNote(new NoteForm(this));
+      NewNote();
     }
 
     /// <summary>
@@ -247,6 +309,7 @@ namespace Stickies {
           } catch (Exception ex) {
             ShowError(String.Format(Messages.ErrorPreferencesSave, ex.Message));
           }
+          ReloadPreferences();
         }
       }
     }
@@ -268,6 +331,7 @@ namespace Stickies {
     /// since this form is not registered with the application message loop.
     /// </summary>
     private void exitMenuItem__Click(object sender, EventArgs e) {
+      UnregisterGlobalHotKey();
       this.Close();
       Application.Exit();
     }
@@ -277,7 +341,7 @@ namespace Stickies {
     /// </summary>
     private void notifyIcon__MouseDoubleClick(object sender, MouseEventArgs e) {
       if (e.Button == MouseButtons.Left) {
-        ShowNote(new NoteForm(this));
+        NewNote();
       }
     }
 
@@ -290,22 +354,6 @@ namespace Stickies {
                           MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
         DeleteAllNotes();
       }
-    }
-
-    /// <summary>
-    /// Takes the user to the balloonClickUrl_ if one is registered.
-    /// </summary>
-    private void notifyIcon__BalloonTipClicked(object sender, EventArgs e) {
-      if (balloonClickUrl_ != null) {
-        System.Diagnostics.Process.Start(balloonClickUrl_);
-      }
-    }
-
-    /// <summary>
-    /// Clears the current balloonClickUrl_, if any.
-    /// </summary>
-    private void notifyIcon__BalloonTipClosed(object sender, EventArgs e) {
-      balloonClickUrl_ = null;
     }
   }
 }

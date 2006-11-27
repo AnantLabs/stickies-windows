@@ -141,6 +141,9 @@
     <value>Version {0}</value>
     <comment>Version text in the About form. The placeholder is replaced with the current version number of the application.</comment>
   </data>
+  <data name="ErrorIconLoad" xml:space="preserve">
+    <value>There was an error loading your custom Stickies icon. {0}</value>
+  </data>
   <data name="ErrorNoteLoad" xml:space="preserve">
     <value>There was an error loading one of your sticky notes. {0}</value>
     <comment>Shown to the user if there is an invalid Note XML file in their settings directory.</comment>
@@ -189,9 +192,21 @@
     <value>Welcome to {0}! To create a new note, double click this icon. Right click to set your preferences.</value>
     <comment>Shown to the user the first time they use the application. The placeholder is replaced with the name of the application.</comment>
   </data>
+  <data name="MessageStickiesAlreadyOpen" xml:space="preserve">
+    <value>Stickies is already running. Double click this icon to create a new sticky note.</value>
+    <comment>The message displayed to the user when they try to open the Stickies application when it is already running.</comment>
+  </data>
+  <data name="NoteDelete" xml:space="preserve">
+    <value>&amp;Delete</value>
+    <comment>Note Delete context menu item</comment>
+  </data>
   <data name="NoteNewStickyNote" xml:space="preserve">
     <value>&lt;New Sticky Note&gt;</value>
     <comment>Title of the window for a NoteForm with no content. This is displayed to the end user when they are Alt-Tabbing through windows.</comment>
+  </data>
+  <data name="NotePreferences" xml:space="preserve">
+    <value>Note &amp;Settings</value>
+    <comment>Note Preferences context menu item</comment>
   </data>
   <data name="NoteSettingsTitle" xml:space="preserve">
     <value>Note Settings</value>
@@ -205,13 +220,53 @@
     <value>Cancel</value>
     <comment>Cancel button in the Preferences form.</comment>
   </data>
+  <data name="PreferencesIconFileDialog" xml:space="preserve">
+    <value>Choose {0} Icon</value>
+    <comment>The title of the icon file dialog in the Stickies preferences form.</comment>
+  </data>
+  <data name="PreferencesNoteAlwaysOnTop" xml:space="preserve">
+    <value>Remain on top of other windows</value>
+    <comment>Next to the "Always on top" checkbox</comment>
+  </data>
+  <data name="PreferencesNoteBackgroundColor" xml:space="preserve">
+    <value>Background color</value>
+    <comment>Next to the Note background color chooser in the Note preferences</comment>
+  </data>
+  <data name="PreferencesNoteBorderColor" xml:space="preserve">
+    <value>Border color</value>
+    <comment>Next to the Note border color chooser in the Note preferences</comment>
+  </data>
+  <data name="PreferencesNoteChange" xml:space="preserve">
+    <value>Change</value>
+    <comment>The text on the "Change" button in the Note preferences</comment>
+  </data>
+  <data name="PreferencesNoteFont" xml:space="preserve">
+    <value>Font</value>
+    <comment>Next to the Note font chooser in the Note preferences</comment>
+  </data>
+  <data name="PreferencesNoteInvisible" xml:space="preserve">
+    <value>Invisble (100%)</value>
+    <comment>At the invisible (100%) end of the transparency bar in the Note preferences</comment>
+  </data>
+  <data name="PreferencesNoteOpaque" xml:space="preserve">
+    <value>Opaque (0%)</value>
+    <comment>At the opaque (0%) end of the transparency bar in the Note preferences</comment>
+  </data>
   <data name="PreferencesNoteText" xml:space="preserve">
     <value>Set your font and color preferences using the buttons to the right.</value>
     <comment>Displayed in the note in the Preferences form.</comment>
   </data>
+  <data name="PreferencesNoteTransparency" xml:space="preserve">
+    <value>Transparency</value>
+    <comment>Next to the transparency bar in the Note preferences</comment>
+  </data>
   <data name="PreferencesSave" xml:space="preserve">
-    <value>Save Preferences</value>
+    <value>Save Changes</value>
     <comment>Save button in the Preferences form.</comment>
+  </data>
+  <data name="PreferencesSettingsTab" xml:space="preserve">
+    <value>Application Settings</value>
+    <comment>The title of the Application Settings tab.</comment>
   </data>
   <data name="PreferencesTitle" xml:space="preserve">
     <value>{0} Preferences</value>

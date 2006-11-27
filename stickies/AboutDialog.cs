@@ -20,7 +20,7 @@ namespace Stickies {
   /// Our About dialog page that displays the Stickies logo, the version number
   /// of the application, and random stuff like copyright information.
   /// </summary>
-  public partial class AboutDialog : Form {
+  public partial class AboutDialog : ContainedForm {
     public AboutDialog() {
       InitializeComponent();
       this.Text = String.Format(Messages.AboutTitle, Application.ProductName);
@@ -29,6 +29,12 @@ namespace Stickies {
       authorLabel_.Text = Messages.AboutAuthor;
       licenseLabel_.Text = Messages.AboutLicense;
       linkLabel_.Text = Messages.AboutLink;
+
+      // Start the preferences dialog under the mouse cursor. Since we are
+      // a ContainedControl, this will work correctly even if the mouse is
+      // near the edge of the screen.
+      this.StartPosition = FormStartPosition.Manual;
+      this.Location = Control.MousePosition;
     }
 
     /// <summary>

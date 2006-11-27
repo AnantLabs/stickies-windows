@@ -13,28 +13,28 @@
     <ManifestKeyFile>Stickies_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetZone>Internet</TargetZone>
+    <ApplicationIcon>Stickies.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Background</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <UpdateUrl>http://finiteloop.org/~btaylor/software/stickies/updatecheck/</UpdateUrl>
+    <InstallUrl>http://finiteloop.org/~btaylor/software/stickies/releases/</InstallUrl>
+    <UpdateUrl>http://finiteloop.org/~btaylor/software/stickies/releases/</UpdateUrl>
     <SupportUrl>http://finiteloop.org/~btaylor/software/stickies/</SupportUrl>
     <ProductName>Stickies</ProductName>
-    <PublisherName>Bret Taylor</PublisherName>
+    <PublisherName>Stickies</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.html</WebPage>
-    <AutorunEnabled>true</AutorunEnabled>
     <ApplicationVersion>3.0.0.%2a</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <ApplicationIcon>Stickies.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,6 +67,9 @@
     </Compile>
     <Compile Include="AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ContainedForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -163,8 +166,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="UpdateChecker.cs" />
-    <Compile Include="VersionInfo.cs" />
     <Compile Include="WinUser.cs" />
   </ItemGroup>
   <ItemGroup>

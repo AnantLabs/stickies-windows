@@ -13,6 +13,7 @@
 // under the License.
 
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Stickies {
@@ -29,10 +30,29 @@ namespace Stickies {
     /// </summary>
     [STAThread]
     static void Main() {
+      // Only allow one instance of Stickies to run at a time
+      Process[] stickiesProcesses = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName);
+      if (stickiesProcesses.Length > 1) {
+        StickiesAlreadyOpen();
+        return;
+      }
+
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
       MainForm mainForm = new MainForm();
       Application.Run();
+    }
+
+    /// <summary>
+    /// Sends a message to the running Stickies process so it can let the
+    /// user know it is already running.
+    /// </summary>
+    private static void StickiesAlreadyOpen() {
+      IntPtr mainWindow = WinUser.FindWindow(null, MainForm.WindowTitle);
+      if (mainWindow.Equals(IntPtr.Zero)) {
+        return;
+      }
+      WinUser.PostMessage(mainWindow, new IntPtr(MainForm.WM_STICKIES_REOPEN), IntPtr.Zero, IntPtr.Zero);
     }
   }
 }

@@ -54,6 +54,20 @@ namespace Stickies {
     }
 
     /// <summary>
+    /// Returns a copy of this Settings instance.
+    /// </summary>
+    public Settings Copy() {
+      ConstructorInfo constructor = this.GetType().GetConstructor(new Type[0]);
+      Settings copy = (Settings) constructor.Invoke(new object[0]);
+      foreach (FieldInfo field in this.GetType().GetFields()) {
+        if (!field.IsLiteral) {
+          field.SetValue(copy, field.GetValue(this));
+        }
+      }
+      return copy;
+    }
+
+    /// <summary>
     /// Loads the Settings struct from the file at the given path for the
     /// given Settings type.
     /// </summary>
@@ -75,7 +89,7 @@ namespace Stickies {
     /// </summary>
     public void Save() {
       System.Diagnostics.Debug.WriteLine("Saving " + GetPath());
-      using (Stream stream = File.OpenWrite(GetPath())) {
+      using (Stream stream = File.Open(GetPath(), FileMode.Create, FileAccess.Write)) {
         XmlSerializer serializer = new XmlSerializer(this.GetType(), XmlNamespace);
         serializer.Serialize(stream, this);
       }
@@ -95,8 +109,8 @@ namespace Stickies {
     /// directory.
     /// </summary>
     public static string SettingsDirectory() {
-      DirectoryInfo directory = new DirectoryInfo(Application.UserAppDataPath);
-      return directory.Parent.FullName;
+      string directory = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+      return Path.Combine(Path.Combine(directory, Application.CompanyName), Application.ProductName);
     }
 
     /// <summary>

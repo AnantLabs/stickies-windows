@@ -51,10 +51,25 @@ namespace Stickies {
     public event NotePreferencesHandler NoteTransparencyChanged;
 
     /// <summary>
+    /// Fired when the note "always on top" preference is set.
+    /// </summary>
+    public event NotePreferencesHandler NoteAlwaysOnTopChanged;
+
+    /// <summary>
     /// Creates a new note preferences control.
     /// </summary>
     public NotePreferencesControl() {
       InitializeComponent();
+      borderColorLabel_.Text = Messages.PreferencesNoteBorderColor;
+      borderColorButton_.Text = Messages.PreferencesNoteChange;
+      backgroundColorLabel_.Text = Messages.PreferencesNoteBackgroundColor;
+      backgroundColorButton_.Text = Messages.PreferencesNoteChange;
+      fontLabel_.Text = Messages.PreferencesNoteFont;
+      fontButton_.Text = Messages.PreferencesNoteChange;
+      alwaysOnTopCheckBox_.Text = Messages.PreferencesNoteAlwaysOnTop;
+      transparencyLabel_.Text = Messages.PreferencesNoteTransparency;
+      opaqueLabel_.Text = Messages.PreferencesNoteOpaque;
+      invisibleLabel_.Text = Messages.PreferencesNoteInvisible;
 
       // Since slider bar controls do not support transparent backgrounds, this
       // is a hack to make our control display correctly in most forms by
@@ -137,9 +152,18 @@ namespace Stickies {
       }
       set {
         transparencyBar_.Value = Math.Min(transparencyBar_.Maximum, Math.Max(0, (int) (value * transparencyBar_.Maximum)));
-        if (NoteTransparencyChanged != null) {
-          NoteTransparencyChanged();
-        }
+      }
+    }
+
+    /// <summary>
+    /// Gets or sets the note "Always on top" preference.
+    /// </summary>
+    public bool NoteAlwaysOnTop {
+      get {
+        return alwaysOnTopCheckBox_.Checked;
+      }
+      set {
+        alwaysOnTopCheckBox_.Checked = value;
       }
     }
 
@@ -166,7 +190,13 @@ namespace Stickies {
       }
     }
 
-    private void transparencyBar__Scroll(object sender, EventArgs e) {
+    private void alwaysOnTopCheckBox__CheckedChanged(object sender, EventArgs e) {
+      if (NoteAlwaysOnTopChanged != null) {
+        NoteAlwaysOnTopChanged();
+      }
+    }
+
+    private void transparencyBar__ValueChanged(object sender, EventArgs e) {
       if (NoteTransparencyChanged != null) {
         NoteTransparencyChanged();
       }
