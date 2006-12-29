@@ -49,6 +49,7 @@ namespace Stickies
           this.notifyIcon_.ContextMenuStrip = this.contextMenu_;
           this.notifyIcon_.Icon = ((System.Drawing.Icon) (resources.GetObject("notifyIcon_.Icon")));
           this.notifyIcon_.Visible = true;
+          this.notifyIcon_.BalloonTipClicked += new System.EventHandler(this.notifyIcon__BalloonTipClicked);
           this.notifyIcon_.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon__MouseDoubleClick);
           // 
           // contextMenu_

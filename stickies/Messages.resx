@@ -220,6 +220,10 @@
     <value>Cancel</value>
     <comment>Cancel button in the Preferences form.</comment>
   </data>
+  <data name="PreferencesCustomIcon" xml:space="preserve">
+    <value>Use a custom icon for Stickies in the system tray</value>
+    <comment>Message next to the custom icon checkbox in the Preferences form</comment>
+  </data>
   <data name="PreferencesIconFileDialog" xml:space="preserve">
     <value>Choose {0} Icon</value>
     <comment>The title of the icon file dialog in the Stickies preferences form.</comment>
@@ -267,6 +271,10 @@
   <data name="PreferencesSettingsTab" xml:space="preserve">
     <value>Application Settings</value>
     <comment>The title of the Application Settings tab.</comment>
+  </data>
+  <data name="PreferencesStartWithWindows" xml:space="preserve">
+    <value>Start Stickies when Windows starts</value>
+    <comment>Message next to the "Start with Windows" checkbox in the Preferences form.</comment>
   </data>
   <data name="PreferencesTitle" xml:space="preserve">
     <value>{0} Preferences</value>

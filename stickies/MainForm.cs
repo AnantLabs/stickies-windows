@@ -49,6 +49,11 @@ namespace Stickies {
     private Preferences preferences_;
 
     /// <summary>
+    /// The URL that we open when the user clicks the notify icon balloon.
+    /// </summary>
+    private string notifyIconBalloonUrl_;
+
+    /// <summary>
     /// The global hotkey ID we use to register our Windows hotkey.
     /// </summary>
     private const int kHotkeyId = 0x1;
@@ -57,7 +62,7 @@ namespace Stickies {
     /// The title we use for our (invisible) Window, which is useful to know
     /// for sending messages to this window from other processes.
     /// </summary>
-    public static string WindowTitle = Application.ProductName + " " + Application.ProductVersion;
+    public static string kWindowTitle = Application.ProductName + " " + Application.ProductVersion;
 
     /// <summary>
     /// The Windows message that we should send to this window when the user
@@ -83,7 +88,7 @@ namespace Stickies {
       notifyIcon_.Text = Application.ProductName;
 
       // Name our window so we can find it via inter-process communication
-      this.Text = WindowTitle;
+      this.Text = kWindowTitle;
 
       // Load the preferences from disk
       preferences_ = LoadPreferences();
@@ -99,6 +104,10 @@ namespace Stickies {
 
       // Register a global hot-key to create new sticky notes
       RegisterGlobalHotKey();
+
+      // Check for new versions of Stickies
+      UpdateChecker checker = new UpdateChecker(GetVersionCheckURL(), new UpdateChecker.Callback(OnUpdateCheck));
+      checker.Run();
     }
 
     /// <summary>
@@ -114,15 +123,32 @@ namespace Stickies {
     /// Shows an error balloon message above our tray icon.
     /// </summary>
     public void ShowError(string message) {
-      notifyIcon_.ShowBalloonTip(5000, Application.ProductName, message,
-                                 ToolTipIcon.Error);
+      ShowMessage(message, null, ToolTipIcon.Error, 5000);
     }
 
     /// <summary>
     /// Shows an informational balloon message above our tray icon.
     /// </summary>
     public void ShowMessage(string message) {
-      notifyIcon_.ShowBalloonTip(7000, Application.ProductName, message,
+      ShowMessage(message, null);
+    }
+
+    /// <summary>
+    /// Shows an informational balloon message above our tray icon. If the user
+    /// clicks the balloon, we open the given URL in the default browser.
+    /// </summary>
+    public void ShowMessage(string message, string clickUrl) {
+      ShowMessage(message, clickUrl, ToolTipIcon.Info, 7000);
+    }
+
+    /// <summary>
+    /// Shows the give balloon message with the given icon above our tray icon.
+    /// If clickUrl is not null, we open the given URL in the default browser if
+    /// the user clicks the URL.
+    /// </summary>
+    public void ShowMessage(string message, string clickUrl, ToolTipIcon icon, int timeout) {
+      notifyIconBalloonUrl_ = clickUrl;
+      notifyIcon_.ShowBalloonTip(timeout, Application.ProductName, message,
                                  ToolTipIcon.Info);
     }
 
@@ -252,6 +278,25 @@ namespace Stickies {
     }
 
     /// <summary>
+    /// If the version on the server is different than our version, show the
+    /// update message.
+    /// </summary>
+    /// <param name="versionInfo"></param>
+    private void OnUpdateCheck(VersionInfo versionInfo) {
+      if (versionInfo.CurrentVersion != Application.ProductVersion) {
+        ShowMessage(versionInfo.UpdateMessage, versionInfo.UpdateUrl);
+      }
+    }
+
+    /// <summary>
+    /// Returns the URL we should use to check for more recent versions of
+    /// Stickies.
+    /// </summary>
+    private String GetVersionCheckURL() {
+      return "http://www.stickiesforwindows.com/checkupgrade?v=" + Application.ProductVersion;
+    }
+
+    /// <summary>
     /// Handle our global Windows hot key.
     /// </summary>
     /// <param name="m"></param>
@@ -353,6 +398,15 @@ namespace Stickies {
                           MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                           MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
         DeleteAllNotes();
+      }
+    }
+
+    /// <summary>
+    /// Open the current notifyIconBalloonUrl_, if any, in the default browser.
+    /// </summary>
+    private void notifyIcon__BalloonTipClicked(object sender, EventArgs e) {
+      if (notifyIconBalloonUrl_ != null) {
+        System.Diagnostics.Process.Start(notifyIconBalloonUrl_);
       }
     }
   }
