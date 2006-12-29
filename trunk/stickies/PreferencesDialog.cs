@@ -33,6 +33,8 @@ namespace Stickies {
       cancelButton_.Text = Messages.PreferencesCancel;
       appearanceTabPage_.Text = Messages.PreferencesAppearanceTab;
       settingsTabPage_.Text = Messages.PreferencesSettingsTab;
+      startOnWindowsCheckBox_.Text = Messages.PreferencesStartWithWindows;
+      iconCheckBox_.Text = Messages.PreferencesCustomIcon;
 
       // Start the preferences dialog under the mouse cursor. Since we are
       // a ContainedControl, this will work correctly even if the mouse is

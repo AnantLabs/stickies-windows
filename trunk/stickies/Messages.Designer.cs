@@ -295,6 +295,15 @@ namespace Stickies {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a custom icon for Stickies in the system tray.
+        /// </summary>
+        internal static string PreferencesCustomIcon {
+            get {
+                return ResourceManager.GetString("PreferencesCustomIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose {0} Icon.
         /// </summary>
         internal static string PreferencesIconFileDialog {
@@ -399,6 +408,15 @@ namespace Stickies {
         internal static string PreferencesSettingsTab {
             get {
                 return ResourceManager.GetString("PreferencesSettingsTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Stickies when Windows starts.
+        /// </summary>
+        internal static string PreferencesStartWithWindows {
+            get {
+                return ResourceManager.GetString("PreferencesStartWithWindows", resourceCulture);
             }
         }
         

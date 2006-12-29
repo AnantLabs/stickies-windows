@@ -54,7 +54,7 @@ namespace Stickies {
             this.preferencesMenuItem_,
             this.deleteMenuItem_});
       this.contextMenu_.Name = "contextMenu_";
-      this.contextMenu_.Size = new System.Drawing.Size(182, 70);
+      this.contextMenu_.Size = new System.Drawing.Size(182, 48);
       // 
       // textBox_
       // 
@@ -66,13 +66,8 @@ namespace Stickies {
       this.textBox_.Location = new System.Drawing.Point(2, 11);
       this.textBox_.Name = "textBox_";
       this.textBox_.Size = new System.Drawing.Size(171, 162);
-      this.textBox_.TabIndex = 1;
+      this.textBox_.TabIndex = 5;
       this.textBox_.Text = "";
-      this.textBox_.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox__KeyDown);
-      this.textBox_.FontChanged += new System.EventHandler(this.MakeDirty);
-      this.textBox_.TextChanged += new System.EventHandler(this.MakeDirty);
-      this.textBox_.BackColorChanged += new System.EventHandler(this.MakeDirty);
-      this.textBox_.ForeColorChanged += new System.EventHandler(this.MakeDirty);
       // 
       // NoteForm
       // 
@@ -100,8 +95,8 @@ namespace Stickies {
     #endregion
 
     private System.Windows.Forms.ContextMenuStrip contextMenu_;
-    private NoteTextBox textBox_;
     private System.Windows.Forms.ToolStripMenuItem preferencesMenuItem_;
     private System.Windows.Forms.ToolStripMenuItem deleteMenuItem_;
+    private NoteTextBox textBox_;
   }
 }

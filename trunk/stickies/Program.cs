@@ -48,7 +48,7 @@ namespace Stickies {
     /// user know it is already running.
     /// </summary>
     private static void StickiesAlreadyOpen() {
-      IntPtr mainWindow = WinUser.FindWindow(null, MainForm.WindowTitle);
+      IntPtr mainWindow = WinUser.FindWindow(null, MainForm.kWindowTitle);
       if (mainWindow.Equals(IntPtr.Zero)) {
         return;
       }
