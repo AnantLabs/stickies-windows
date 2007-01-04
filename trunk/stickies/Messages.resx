@@ -130,7 +130,7 @@
     <comment>License text in the About form.</comment>
   </data>
   <data name="AboutLink" xml:space="preserve">
-    <value>http://finiteloop.org/~btaylor/software/stickies/</value>
+    <value>http://www.stickiesforwindows.com/</value>
     <comment>The URL we display in the About box.</comment>
   </data>
   <data name="AboutTitle" xml:space="preserve">
@@ -195,6 +195,10 @@
   <data name="MessageStickiesAlreadyOpen" xml:space="preserve">
     <value>Stickies is already running. Double click this icon to create a new sticky note.</value>
     <comment>The message displayed to the user when they try to open the Stickies application when it is already running.</comment>
+  </data>
+  <data name="MessageUpgraded" xml:space="preserve">
+    <value>{0} has been successfully upgraded to version {1}.</value>
+    <comment>Shown to the user after an upgrade.</comment>
   </data>
   <data name="NoteDelete" xml:space="preserve">
     <value>&amp;Delete</value>

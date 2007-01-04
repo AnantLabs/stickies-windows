@@ -88,7 +88,7 @@ namespace Stickies {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://finiteloop.org/~btaylor/software/stickies/.
+        ///   Looks up a localized string similar to http://www.stickiesforwindows.com/.
         /// </summary>
         internal static string AboutLink {
             get {
@@ -237,6 +237,15 @@ namespace Stickies {
         internal static string MessageStickiesAlreadyOpen {
             get {
                 return ResourceManager.GetString("MessageStickiesAlreadyOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has been successfully upgraded to version {1}..
+        /// </summary>
+        internal static string MessageUpgraded {
+            get {
+                return ResourceManager.GetString("MessageUpgraded", resourceCulture);
             }
         }
         

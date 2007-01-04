@@ -19,7 +19,7 @@ namespace Stickies {
   /// <summary>
   /// Reproductions of constants from winuser.h.
   /// </summary>
-  class WinUser {
+  public class WinUser {
     public const int WM_SETFOCUS = 0x0007;
     public const int WM_KILLFOCUS = 0x0008;
     public const int WM_WINDOWPOSCHANGING = 0x0046;
@@ -77,7 +77,7 @@ namespace Stickies {
 
     [DllImport("user32.dll")]
     public static extern IntPtr FindWindow(String className, String title);
- 
+
     [DllImport("user32.dll")]
     public static extern IntPtr PostMessage(IntPtr hWnd, IntPtr msg, IntPtr wParam, IntPtr lParam);
 
