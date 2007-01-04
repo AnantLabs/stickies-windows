@@ -62,13 +62,19 @@ namespace Stickies {
     /// The title we use for our (invisible) Window, which is useful to know
     /// for sending messages to this window from other processes.
     /// </summary>
-    public static string kWindowTitle = Application.ProductName + " " + Application.ProductVersion;
+    public static string kWindowTitle = Application.ProductName + "MainForm";
 
     /// <summary>
     /// The Windows message that we should send to this window when the user
     /// tries to open stickies after it is already open.
     /// </summary>
     public const int WM_STICKIES_REOPEN = WinUser.WM_USER + 1;
+
+    /// <summary>
+    /// The Windows message that we should send to this window when Stickies
+    /// should close/exit.
+    /// </summary>
+    public const int WM_STICKIES_QUIT = WinUser.WM_USER + 2;
 
     /// <summary>
     /// Load our preferences from disk, set up our tray icon, and load all of
@@ -156,11 +162,22 @@ namespace Stickies {
     /// Loads the application preferences from disk. If it doesn't exist, we
     /// create a new set of preferences, save them to disk, and show a welcome
     /// message to the user since this is (presumably) the first time they
-    /// have used the application.
+    /// have used the application. Likewise, if Stickies has been upgraded,
+    /// show an upgrade message.
     /// </summary>
     private Preferences LoadPreferences() {
       try {
-        return Preferences.Load();
+        Preferences preferences = Preferences.Load();
+        if (preferences.Version != Application.ProductVersion) {
+          ShowMessage(String.Format(Messages.MessageUpgraded, Application.ProductName, Application.ProductVersion));
+          try {
+            preferences.Version = Application.ProductVersion;
+            preferences.Save();
+          } catch (Exception e) {
+            ShowError(String.Format(Messages.ErrorPreferencesSave, e.Message));
+          }
+        }
+        return preferences;
       } catch (Exception) {
         Preferences newPreferences = new Preferences();
         ShowMessage(String.Format(Messages.MessageIntroduction, Application.ProductName));
@@ -297,6 +314,15 @@ namespace Stickies {
     }
 
     /// <summary>
+    /// Frees all resources and exits the application.
+    /// </summary>
+    private void Quit() {
+      UnregisterGlobalHotKey();
+      this.Close();
+      Application.Exit();
+    }
+
+    /// <summary>
     /// Handle our global Windows hot key.
     /// </summary>
     /// <param name="m"></param>
@@ -307,6 +333,9 @@ namespace Stickies {
           break;
         case WM_STICKIES_REOPEN:
           ShowMessage(Messages.MessageStickiesAlreadyOpen);
+          break;
+        case WM_STICKIES_QUIT:
+          Quit();
           break;
         default:
           base.WndProc(ref m);
@@ -376,9 +405,7 @@ namespace Stickies {
     /// since this form is not registered with the application message loop.
     /// </summary>
     private void exitMenuItem__Click(object sender, EventArgs e) {
-      UnregisterGlobalHotKey();
-      this.Close();
-      Application.Exit();
+      Quit();
     }
 
     /// <summary>
@@ -406,7 +433,11 @@ namespace Stickies {
     /// </summary>
     private void notifyIcon__BalloonTipClicked(object sender, EventArgs e) {
       if (notifyIconBalloonUrl_ != null) {
-        System.Diagnostics.Process.Start(notifyIconBalloonUrl_);
+        try {
+          System.Diagnostics.Process.Start(notifyIconBalloonUrl_);
+        } catch (Exception) {
+          // If, e.g., Firefox crashes, we can get an exception here
+        }
       }
     }
   }
