@@ -367,7 +367,7 @@ namespace Stickies {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invisble (100%).
+        ///   Looks up a localized string similar to Invisible (100%).
         /// </summary>
         internal static string PreferencesNoteInvisible {
             get {

@@ -253,7 +253,7 @@
     <comment>Next to the Note font chooser in the Note preferences</comment>
   </data>
   <data name="PreferencesNoteInvisible" xml:space="preserve">
-    <value>Invisble (100%)</value>
+    <value>Invisible (100%)</value>
     <comment>At the invisible (100%) end of the transparency bar in the Note preferences</comment>
   </data>
   <data name="PreferencesNoteOpaque" xml:space="preserve">
