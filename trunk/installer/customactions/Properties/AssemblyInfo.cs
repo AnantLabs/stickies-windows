@@ -17,10 +17,10 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General information about the Assembly
-[assembly: AssemblyTitle("Stickies")]
-[assembly: AssemblyDescription("A simple sticky notes application in the spirit of the classic Mac OS application.")]
+[assembly: AssemblyTitle("Stickies Custom Actions")]
+[assembly: AssemblyDescription("Custom actions for the Stickies installer")]
 [assembly: AssemblyCompany("Bret Taylor")]
-[assembly: AssemblyProduct("Stickies")]
+[assembly: AssemblyProduct("Stickies Custom Actions")]
 [assembly: AssemblyCopyright("Copyright 2006 Bret Taylor")]
 
 // Version information for the application
@@ -29,4 +29,4 @@ using System.Runtime.InteropServices;
 
 // We don't need our components visible from COM
 [assembly: ComVisible(false)]
-[assembly: Guid("300d55a9-139f-4952-afe5-eef75d6a1d37")]
+[assembly: Guid("c42ae663-a4c5-4f75-9db2-9d9b1ad09f09")]

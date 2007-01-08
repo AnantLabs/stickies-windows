@@ -310,7 +310,7 @@ namespace Stickies {
     /// Stickies.
     /// </summary>
     private String GetVersionCheckURL() {
-      return "http://www.stickiesforwindows.com/checkupgrade?v=" + Application.ProductVersion;
+      return String.Format(Messages.UpdateCheckUrl, Application.ProductVersion);
     }
 
     /// <summary>

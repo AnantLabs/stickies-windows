@@ -223,7 +223,7 @@ namespace Stickies {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome to {0}! To create a new note, double click this icon. Right click to set your preferences..
+        ///   Looks up a localized string similar to Welcome to {0}! To create a new note, double click this icon or type Ctrl-Shift-N. Right click to set your preferences..
         /// </summary>
         internal static string MessageIntroduction {
             get {
@@ -439,7 +439,7 @@ namespace Stickies {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://finiteloop.org/~btaylor/software/stickies/checkupdate.php?v={0}.
+        ///   Looks up a localized string similar to http://www.stickiesforwindows.com/checkupgrade?v={0}.
         /// </summary>
         internal static string UpdateCheckUrl {
             get {
