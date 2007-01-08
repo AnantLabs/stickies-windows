@@ -12,7 +12,7 @@
     <ManifestCertificateThumbprint>5213E9A3374CFA601EBA0D1B60555BCE7A40DAF9</ManifestCertificateThumbprint>
     <ManifestKeyFile>Stickies_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetZone>Internet</TargetZone>
     <ApplicationIcon>Stickies.ico</ApplicationIcon>
