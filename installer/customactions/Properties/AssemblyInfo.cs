@@ -24,8 +24,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright 2006 Bret Taylor")]
 
 // Version information for the application
-[assembly: AssemblyVersion("3.0.3")]
-[assembly: AssemblyFileVersion("3.0.3")]
+[assembly: AssemblyVersion("3.0.4")]
+[assembly: AssemblyFileVersion("3.0.4")]
 
 // We don't need our components visible from COM
 [assembly: ComVisible(false)]
