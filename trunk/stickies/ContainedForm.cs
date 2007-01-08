@@ -35,17 +35,32 @@ namespace Stickies {
     /// </summary>
     private Point CorrectPosition(Point position) {
       Point newPosition = new Point(position.X, position.Y);
+
+      // Figure out the bounds of all screens (we just round if the monitors
+      // happen to be different sizes).
       Rectangle screenBounds = Screen.FromControl(this).WorkingArea;
-      Rectangle formBounds = this.Bounds;
-      if (newPosition.X < screenBounds.Left) {
-        newPosition.X = screenBounds.Left;
-      } else if (newPosition.X + formBounds.Width > screenBounds.Right) {
-        newPosition.X = screenBounds.Right - formBounds.Width;
+      int left = screenBounds.Left;
+      int top = screenBounds.Top;
+      int right = screenBounds.Right;
+      int bottom = screenBounds.Bottom;
+      foreach (Screen screen in Screen.AllScreens) {
+        left = Math.Min(screen.WorkingArea.Left, left);
+        top = Math.Min(screen.WorkingArea.Top, top);
+        right = Math.Max(screen.WorkingArea.Right, right);
+        bottom = Math.Max(screen.WorkingArea.Bottom, bottom);
       }
-      if (newPosition.Y < screenBounds.Top) {
-        newPosition.Y = screenBounds.Top;
-      } else if (newPosition.Y + formBounds.Height > screenBounds.Bottom) {
-        newPosition.Y = screenBounds.Bottom - formBounds.Height;
+      Rectangle workingBounds = new Rectangle(left, top, right - left, bottom - top);
+
+      Rectangle formBounds = this.Bounds;
+      if (newPosition.X < workingBounds.Left) {
+        newPosition.X = workingBounds.Left;
+      } else if (newPosition.X + formBounds.Width > workingBounds.Right) {
+        newPosition.X = workingBounds.Right - formBounds.Width;
+      }
+      if (newPosition.Y < workingBounds.Top) {
+        newPosition.Y = workingBounds.Top;
+      } else if (newPosition.Y + formBounds.Height > workingBounds.Bottom) {
+        newPosition.Y = workingBounds.Bottom - formBounds.Height;
       }
       return newPosition;
     }
