@@ -189,7 +189,7 @@
     <comment>"Show All Notes" menu item</comment>
   </data>
   <data name="MessageIntroduction" xml:space="preserve">
-    <value>Welcome to {0}! To create a new note, double click this icon. Right click to set your preferences.</value>
+    <value>Welcome to {0}! To create a new note, double click this icon or type Ctrl-Shift-N. Right click to set your preferences.</value>
     <comment>Shown to the user the first time they use the application. The placeholder is replaced with the name of the application.</comment>
   </data>
   <data name="MessageStickiesAlreadyOpen" xml:space="preserve">
@@ -285,7 +285,7 @@
     <comment>Title of the Preferences form. The placeholder is replaced with the product name.</comment>
   </data>
   <data name="UpdateCheckUrl" xml:space="preserve">
-    <value>http://finiteloop.org/~btaylor/software/stickies/checkupdate.php?v={0}</value>
+    <value>http://www.stickiesforwindows.com/checkupgrade?v={0}</value>
     <comment>The URL we use to check for new versions of Stickies.</comment>
   </data>
 </root>
