@@ -151,7 +151,11 @@ namespace Stickies {
         this.BackColor = textBox_.BackColor;
         WinUser.AnimateWindow(this.Handle, FadeTime, WinUser.AW_BLEND | WinUser.AW_HIDE);
       }
-      note_.Delete();
+      try {
+        note_.Delete();
+      } catch (Exception e) {
+        mainForm_.ShowError(String.Format(Messages.ErrorNoteSave, e.Message));
+      }
       note_ = null;
       this.Close();
     }

@@ -89,9 +89,20 @@ namespace Stickies {
     /// </summary>
     public void Save() {
       System.Diagnostics.Debug.WriteLine("Saving " + GetPath());
+      RecursiveCreateDirectory(new DirectoryInfo(SettingsDirectory()));
       using (Stream stream = File.Open(GetPath(), FileMode.Create, FileAccess.Write)) {
         XmlSerializer serializer = new XmlSerializer(this.GetType(), XmlNamespace);
         serializer.Serialize(stream, this);
+      }
+    }
+
+    /// <summary>
+    /// Recursively creates the given directory.
+    /// </summary>
+    private void RecursiveCreateDirectory(DirectoryInfo directory) {
+      if (!directory.Exists) {
+        RecursiveCreateDirectory(directory.Parent);
+        directory.Create();
       }
     }
 
