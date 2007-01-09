@@ -214,6 +214,15 @@ namespace Stickies {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Report a &amp;Bug.
+        /// </summary>
+        internal static string MainReportBug {
+            get {
+                return ResourceManager.GetString("MainReportBug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Show All Notes.
         /// </summary>
         internal static string MainShowAllNotes {
@@ -250,11 +259,38 @@ namespace Stickies {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;Archive.
+        /// </summary>
+        internal static string NoteArchive {
+            get {
+                return ResourceManager.GetString("NoteArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Bold.
+        /// </summary>
+        internal static string NoteBold {
+            get {
+                return ResourceManager.GetString("NoteBold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Delete.
         /// </summary>
         internal static string NoteDelete {
             get {
                 return ResourceManager.GetString("NoteDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Italic.
+        /// </summary>
+        internal static string NoteItalic {
+            get {
+                return ResourceManager.GetString("NoteItalic", resourceCulture);
             }
         }
         
@@ -282,6 +318,24 @@ namespace Stickies {
         internal static string NoteSettingsTitle {
             get {
                 return ResourceManager.GetString("NoteSettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Strikethrough.
+        /// </summary>
+        internal static string NoteStrikethrough {
+            get {
+                return ResourceManager.GetString("NoteStrikethrough", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Underline.
+        /// </summary>
+        internal static string NoteUnderline {
+            get {
+                return ResourceManager.GetString("NoteUnderline", resourceCulture);
             }
         }
         
@@ -435,6 +489,15 @@ namespace Stickies {
         internal static string PreferencesTitle {
             get {
                 return ResourceManager.GetString("PreferencesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://code.google.com/p/stickies-windows/issues/entry.
+        /// </summary>
+        internal static string ReportBugUrl {
+            get {
+                return ResourceManager.GetString("ReportBugUrl", resourceCulture);
             }
         }
         

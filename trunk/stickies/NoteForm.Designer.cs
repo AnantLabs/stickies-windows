@@ -24,19 +24,32 @@ namespace Stickies {
     /// </summary>
     private void InitializeComponent() {
       this.components = new System.ComponentModel.Container();
+      System.Windows.Forms.ToolStripSeparator toolStripMenuItem_;
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NoteForm));
       this.deleteMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
       this.preferencesMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
       this.contextMenu_ = new System.Windows.Forms.ContextMenuStrip(this.components);
+      this.archiveMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
+      this.boldMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
+      this.italicMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
+      this.underlineMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
+      this.strikethroughMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
       this.textBox_ = new Stickies.NoteTextBox();
+      this.saveFileDialog_ = new System.Windows.Forms.SaveFileDialog();
+      toolStripMenuItem_ = new System.Windows.Forms.ToolStripSeparator();
       this.contextMenu_.SuspendLayout();
       this.SuspendLayout();
+      // 
+      // toolStripMenuItem_
+      // 
+      toolStripMenuItem_.Name = "toolStripMenuItem_";
+      toolStripMenuItem_.Size = new System.Drawing.Size(185, 6);
       // 
       // deleteMenuItem_
       // 
       this.deleteMenuItem_.Name = "deleteMenuItem_";
       this.deleteMenuItem_.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
-      this.deleteMenuItem_.Size = new System.Drawing.Size(181, 22);
+      this.deleteMenuItem_.Size = new System.Drawing.Size(188, 22);
       this.deleteMenuItem_.Text = "&Delete";
       this.deleteMenuItem_.Click += new System.EventHandler(this.deleteMenuItem__Click);
       // 
@@ -44,7 +57,7 @@ namespace Stickies {
       // 
       this.preferencesMenuItem_.Name = "preferencesMenuItem_";
       this.preferencesMenuItem_.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-      this.preferencesMenuItem_.Size = new System.Drawing.Size(181, 22);
+      this.preferencesMenuItem_.Size = new System.Drawing.Size(188, 22);
       this.preferencesMenuItem_.Text = "&Preferences";
       this.preferencesMenuItem_.Click += new System.EventHandler(this.preferencesMenuItem__Click);
       // 
@@ -52,9 +65,55 @@ namespace Stickies {
       // 
       this.contextMenu_.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.preferencesMenuItem_,
-            this.deleteMenuItem_});
+            this.deleteMenuItem_,
+            this.archiveMenuItem_,
+            toolStripMenuItem_,
+            this.boldMenuItem_,
+            this.italicMenuItem_,
+            this.underlineMenuItem_,
+            this.strikethroughMenuItem_});
       this.contextMenu_.Name = "contextMenu_";
-      this.contextMenu_.Size = new System.Drawing.Size(182, 48);
+      this.contextMenu_.Size = new System.Drawing.Size(189, 164);
+      // 
+      // archiveMenuItem_
+      // 
+      this.archiveMenuItem_.Name = "archiveMenuItem_";
+      this.archiveMenuItem_.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+      this.archiveMenuItem_.Size = new System.Drawing.Size(188, 22);
+      this.archiveMenuItem_.Text = "&Archive";
+      this.archiveMenuItem_.Click += new System.EventHandler(this.archiveMenuItem__Click);
+      // 
+      // boldMenuItem_
+      // 
+      this.boldMenuItem_.Name = "boldMenuItem_";
+      this.boldMenuItem_.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
+      this.boldMenuItem_.Size = new System.Drawing.Size(188, 22);
+      this.boldMenuItem_.Text = "&Bold";
+      this.boldMenuItem_.Click += new System.EventHandler(this.boldMenuItem__Click);
+      // 
+      // italicMenuItem_
+      // 
+      this.italicMenuItem_.Name = "italicMenuItem_";
+      this.italicMenuItem_.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
+      this.italicMenuItem_.Size = new System.Drawing.Size(188, 22);
+      this.italicMenuItem_.Text = "&Italic";
+      this.italicMenuItem_.Click += new System.EventHandler(this.italicMenuItem__Click);
+      // 
+      // underlineMenuItem_
+      // 
+      this.underlineMenuItem_.Name = "underlineMenuItem_";
+      this.underlineMenuItem_.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
+      this.underlineMenuItem_.Size = new System.Drawing.Size(188, 22);
+      this.underlineMenuItem_.Text = "&Underline";
+      this.underlineMenuItem_.Click += new System.EventHandler(this.underlineMenuItem__Click);
+      // 
+      // strikethroughMenuItem_
+      // 
+      this.strikethroughMenuItem_.Name = "strikethroughMenuItem_";
+      this.strikethroughMenuItem_.ShortcutKeys = ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+      this.strikethroughMenuItem_.Size = new System.Drawing.Size(188, 22);
+      this.strikethroughMenuItem_.Text = "&Strikethrough";
+      this.strikethroughMenuItem_.Click += new System.EventHandler(this.strikethroughMenuItem__Click);
       // 
       // textBox_
       // 
@@ -68,6 +127,8 @@ namespace Stickies {
       this.textBox_.Size = new System.Drawing.Size(171, 162);
       this.textBox_.TabIndex = 5;
       this.textBox_.Text = "";
+      this.textBox_.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.textBox__LinkClicked);
+      this.textBox_.SelectionChanged += new System.EventHandler(this.textBox__SelectionChanged);
       // 
       // NoteForm
       // 
@@ -98,5 +159,11 @@ namespace Stickies {
     private System.Windows.Forms.ToolStripMenuItem preferencesMenuItem_;
     private System.Windows.Forms.ToolStripMenuItem deleteMenuItem_;
     private NoteTextBox textBox_;
+    private System.Windows.Forms.ToolStripMenuItem boldMenuItem_;
+    private System.Windows.Forms.ToolStripMenuItem italicMenuItem_;
+    private System.Windows.Forms.ToolStripMenuItem underlineMenuItem_;
+    private System.Windows.Forms.ToolStripMenuItem archiveMenuItem_;
+    private System.Windows.Forms.ToolStripMenuItem strikethroughMenuItem_;
+    private System.Windows.Forms.SaveFileDialog saveFileDialog_;
   }
 }
