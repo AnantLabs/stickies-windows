@@ -40,6 +40,7 @@ namespace Stickies
           this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
           this.aboutMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
           this.exitMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
+          this.reportBugMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
           this.contextMenu_.SuspendLayout();
           this.SuspendLayout();
           // 
@@ -61,10 +62,11 @@ namespace Stickies
             this.toolStripMenuItem2,
             this.preferencesMenuItem_,
             this.toolStripMenuItem1,
+            this.reportBugMenuItem_,
             this.aboutMenuItem_,
             this.exitMenuItem_});
           this.contextMenu_.Name = "contextMenu_";
-          this.contextMenu_.Size = new System.Drawing.Size(162, 148);
+          this.contextMenu_.Size = new System.Drawing.Size(162, 192);
           // 
           // newNoteMenuItem_
           // 
@@ -118,6 +120,13 @@ namespace Stickies
           this.exitMenuItem_.Text = "E&xit";
           this.exitMenuItem_.Click += new System.EventHandler(this.exitMenuItem__Click);
           // 
+          // reportBugMenuItem_
+          // 
+          this.reportBugMenuItem_.Name = "reportBugMenuItem_";
+          this.reportBugMenuItem_.Size = new System.Drawing.Size(161, 22);
+          this.reportBugMenuItem_.Text = "Report a &Bug";
+          this.reportBugMenuItem_.Click += new System.EventHandler(this.reportBugMenuItem__Click);
+          // 
           // MainForm
           // 
           this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -141,6 +150,7 @@ namespace Stickies
       private System.Windows.Forms.ToolStripMenuItem aboutMenuItem_;
       private System.Windows.Forms.ToolStripMenuItem exitMenuItem_;
       private System.Windows.Forms.ToolStripMenuItem deleteAllNotesMenuItem_;
+      private System.Windows.Forms.ToolStripMenuItem reportBugMenuItem_;
     }
 }
 

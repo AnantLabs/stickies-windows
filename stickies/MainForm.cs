@@ -89,6 +89,7 @@ namespace Stickies {
       deleteAllNotesMenuItem_.Text = Messages.MainDeleteAllNotes;
       aboutMenuItem_.Text = String.Format(Messages.MainAbout, Application.ProductName);
       newNoteMenuItem_.Text = Messages.MainNewNote;
+      reportBugMenuItem_.Text = Messages.MainReportBug;
       preferencesMenuItem_.Text = Messages.MainPreferences;
       exitMenuItem_.Text = Messages.MainExit;
       notifyIcon_.Text = Application.ProductName;
@@ -283,7 +284,7 @@ namespace Stickies {
     /// </summary>
     private void RegisterGlobalHotKey() {
       if (WinUser.RegisterHotKey(this.Handle, kHotkeyId, WinUser.MOD_CONTROL | WinUser.MOD_SHIFT, (int) Keys.N) == 0) {
-        System.Diagnostics.Debug.WriteLine("RegisterHotKey failed");
+        Debug.WriteLine("RegisterHotKey failed");
       }
     }
 
@@ -434,10 +435,21 @@ namespace Stickies {
     private void notifyIcon__BalloonTipClicked(object sender, EventArgs e) {
       if (notifyIconBalloonUrl_ != null) {
         try {
-          System.Diagnostics.Process.Start(notifyIconBalloonUrl_);
-        } catch (Exception) {
-          // If, e.g., Firefox crashes, we can get an exception here
+          Process.Start(notifyIconBalloonUrl_);
+        } catch (Exception exception) {
+          ShowError(exception.Message);
         }
+      }
+    }
+
+    /// <summary>
+    /// Go to the Google Code issue tracking web site.
+    /// </summary>
+    private void reportBugMenuItem__Click(object sender, EventArgs e) {
+      try {
+        Process.Start(Messages.ReportBugUrl);
+      } catch (Exception exception) {
+        ShowError(exception.Message);
       }
     }
   }

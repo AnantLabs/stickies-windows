@@ -184,6 +184,10 @@
     <value>&amp;Preferences</value>
     <comment>"Preferences" menu item</comment>
   </data>
+  <data name="MainReportBug" xml:space="preserve">
+    <value>Report a &amp;Bug</value>
+    <comment>"Report a Bug" menu item</comment>
+  </data>
   <data name="MainShowAllNotes" xml:space="preserve">
     <value>&amp;Show All Notes</value>
     <comment>"Show All Notes" menu item</comment>
@@ -200,9 +204,21 @@
     <value>{0} has been successfully upgraded to version {1}.</value>
     <comment>Shown to the user after an upgrade.</comment>
   </data>
+  <data name="NoteArchive" xml:space="preserve">
+    <value>&amp;Archive</value>
+    <comment>"Archive" menu item</comment>
+  </data>
+  <data name="NoteBold" xml:space="preserve">
+    <value>&amp;Bold</value>
+    <comment>"Bold" menu item</comment>
+  </data>
   <data name="NoteDelete" xml:space="preserve">
     <value>&amp;Delete</value>
     <comment>Note Delete context menu item</comment>
+  </data>
+  <data name="NoteItalic" xml:space="preserve">
+    <value>&amp;Italic</value>
+    <comment>"Italic" menu item</comment>
   </data>
   <data name="NoteNewStickyNote" xml:space="preserve">
     <value>&lt;New Sticky Note&gt;</value>
@@ -215,6 +231,14 @@
   <data name="NoteSettingsTitle" xml:space="preserve">
     <value>Note Settings</value>
     <comment>Title of the Note Settings dialog box.</comment>
+  </data>
+  <data name="NoteStrikethrough" xml:space="preserve">
+    <value>&amp;Strikethrough</value>
+    <comment>"Strikethrough" menu item</comment>
+  </data>
+  <data name="NoteUnderline" xml:space="preserve">
+    <value>&amp;Underline</value>
+    <comment>"Underline" menu item</comment>
   </data>
   <data name="PreferencesAppearanceTab" xml:space="preserve">
     <value>Note Appearance</value>
@@ -283,6 +307,10 @@
   <data name="PreferencesTitle" xml:space="preserve">
     <value>{0} Preferences</value>
     <comment>Title of the Preferences form. The placeholder is replaced with the product name.</comment>
+  </data>
+  <data name="ReportBugUrl" xml:space="preserve">
+    <value>http://code.google.com/p/stickies-windows/issues/entry</value>
+    <comment>The URL users should visit to report a bug in the application</comment>
   </data>
   <data name="UpdateCheckUrl" xml:space="preserve">
     <value>http://www.stickiesforwindows.com/checkupgrade?v={0}</value>

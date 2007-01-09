@@ -13,7 +13,9 @@
 // under the License.
 
 using System;
+using System.Collections;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -68,6 +70,10 @@ namespace Stickies {
       InitializeComponent();
       preferencesMenuItem_.Text = Messages.NotePreferences;
       deleteMenuItem_.Text = Messages.NoteDelete;
+      archiveMenuItem_.Text = Messages.NoteArchive;
+      boldMenuItem_.Text = Messages.NoteBold;
+      italicMenuItem_.Text = Messages.NoteItalic;
+      strikethroughMenuItem_.Text = Messages.NoteStrikethrough;
 
       // Load the settings from the Note instance
       this.StartPosition = FormStartPosition.Manual;
@@ -250,6 +256,68 @@ namespace Stickies {
     }
 
     /// <summary>
+    /// Checks or unchecks the bold/italic/underline menus.
+    /// </summary>
+    private void UpdateMenus() {
+      Font font = this.SelectionFont;
+      boldMenuItem_.Checked = font.Bold;
+      italicMenuItem_.Checked = font.Italic;
+      underlineMenuItem_.Checked = font.Underline;
+      strikethroughMenuItem_.Checked = font.Strikeout;
+    }
+
+    /// <summary>
+    /// Shows the user a file dialog so they can save the note to a standalone
+    /// file. Returns true if the operation was not cancelled and completed
+    /// successfully.
+    /// </summary>
+    private bool ExportNote() {
+      UpdateTitle();
+      // Set the default file name and strip illegal characters (but truncate
+      // since long file names are useless). We cut off the string by maxing it
+      // at 50 characters, and then we cut of the (likely truncated) word at
+      // the end.
+      string fileName = this.Text;
+      if (fileName.Length > 50) {
+        string[] parts = this.Text.Substring(0, 50).Split();
+        if (parts.Length > 0) {
+          fileName = String.Join(" ", parts, 0, Math.Max(parts.Length - 1, 1));
+        } else {
+          fileName = Messages.NoteNewStickyNote;
+        }
+      }
+      ArrayList illegalChars = new ArrayList();
+      illegalChars.AddRange(Path.GetInvalidFileNameChars());
+      illegalChars.Add(Path.PathSeparator);
+      illegalChars.Add(Path.VolumeSeparatorChar);
+      illegalChars.Add(Path.AltDirectorySeparatorChar);
+      illegalChars.Add(Path.DirectorySeparatorChar);
+      illegalChars.Add('*');
+      illegalChars.Add('?');
+      foreach (char illegal in illegalChars) {
+        fileName = fileName.Replace(new String(illegal, 1), "");
+      }
+
+      // Add today's date to the file name
+      saveFileDialog_.FileName = fileName + " - " + String.Format("{0:yyyy-MM-dd}", System.DateTime.Now) + ".rtf";
+      if (saveFileDialog_.ShowDialog(this) == DialogResult.OK) {
+        try {
+          using (StreamWriter writer = new StreamWriter(saveFileDialog_.FileName)) {
+            if (Path.GetExtension(saveFileDialog_.FileName) == ".rtf") {
+              writer.Write(textBox_.Rtf);
+            } else {
+              writer.Write(textBox_.Text);
+            }
+            return true;
+          }
+        } catch (Exception e) {
+          this.mainForm_.ShowError(e.Message);
+        }
+      }
+      return false;
+    }
+
+    /// <summary>
     /// Deletes this note.
     /// </summary>
     private void deleteMenuItem__Click(object sender, EventArgs e) {
@@ -366,6 +434,56 @@ namespace Stickies {
       if (textBox_.Text.Length == 0) {
         this.Unlock();
         textBox_.Focus();
+      }
+    }
+
+    private void archiveMenuItem__Click(object sender, EventArgs e) {
+      if (ExportNote()) {
+        this.Delete();
+      }
+    }
+
+    private void boldMenuItem__Click(object sender, System.EventArgs e) {
+      textBox_.SelectionFont = new Font(this.SelectionFont, this.SelectionFont.Style ^ FontStyle.Bold);
+      UpdateMenus();
+    }
+
+    private void italicMenuItem__Click(object sender, System.EventArgs e) {
+      textBox_.SelectionFont = new Font(this.SelectionFont, this.SelectionFont.Style ^ FontStyle.Italic);
+      UpdateMenus();
+    }
+
+    private void underlineMenuItem__Click(object sender, System.EventArgs e) {
+      textBox_.SelectionFont = new Font(this.SelectionFont, this.SelectionFont.Style ^ FontStyle.Underline);
+      UpdateMenus();
+    }
+
+    private void strikethroughMenuItem__Click(object sender, EventArgs e) {
+      textBox_.SelectionFont = new Font(this.SelectionFont, this.SelectionFont.Style ^ FontStyle.Strikeout);
+      UpdateMenus();
+    }
+
+    private void textBox__SelectionChanged(object sender, EventArgs e) {
+      UpdateMenus();
+    }
+
+    private void textBox__LinkClicked(object sender, LinkClickedEventArgs e) {
+      try {
+        System.Diagnostics.Process.Start(e.LinkText);
+      } catch (Exception exception) {
+        this.mainForm_.ShowError(exception.Message);
+      }
+    }
+
+    // Returns the selection font of the text box, or the global font of the
+    // textbox if there is no text selected.
+    private Font SelectionFont {
+      get {
+        if (textBox_.SelectionFont != null) {
+          return textBox_.SelectionFont;
+        } else {
+          return textBox_.Font;
+        }
       }
     }
   }
