@@ -47,6 +47,12 @@ namespace Stickies {
     private const int FadeTime = 300;
 
     /// <summary>
+    /// The size, in pixels, of the resize target in the bottom corners of the
+    /// window.
+    /// </summary>
+    private const int ResizeTargetSize = 10;
+
+    /// <summary>
     /// True if we have changed since our last save to disk.
     /// </summary>
     private bool dirty_;
@@ -55,6 +61,16 @@ namespace Stickies {
     /// True if the user gave the fadeIn option in the constructor.
     /// </summary>
     private bool fadeIn_;
+
+    /// <summary>
+    /// True if this note is "rolled up."
+    /// </summary>
+    private bool rolledUp_;
+
+    /// <summary>
+    /// The height of this note before it was "rolled up."
+    /// </summary>
+    private int height_;
 
     /// <summary>
     /// Creates a NoteForm for the given Note instance. We load our settings
@@ -123,13 +139,14 @@ namespace Stickies {
       note_.Left = this.Left;
       note_.Top = this.Top;
       note_.Width = this.Width;
-      note_.Height = this.Height;
+      note_.Height = rolledUp_ ? height_ : this.Height;
       note_.Transparency = 1.0 - this.Opacity;
       note_.FontColor = textBox_.ForeColor.ToArgb();
       note_.BackColor = textBox_.BackColor.ToArgb();
       note_.BorderColor = this.BackColor.ToArgb();
       note_.AlwaysOnTop = this.TopMost;
       note_.Rtf = textBox_.Rtf;
+      note_.RolledUp = rolledUp_;
       try {
         note_.Save();
       } catch (Exception e) {
@@ -176,10 +193,36 @@ namespace Stickies {
 
     /// <summary>
     /// Unlocks the form, which make the text area editable again. See Lock()
-    /// for details.
+    /// for details.  We do not allow unlocking when the note is "rolled up"
+    /// so users don't accidentally type content into a note they can't see.
     /// </summary>
     public void Unlock() {
-      textBox_.Locked = false;
+      if (!rolledUp_) {
+        textBox_.Locked = false;
+      }
+    }
+
+    /// <summary>
+    /// "Rolls" the note up into the title bar, or undoes the roll if we are
+    /// already rolled up.
+    /// </summary>
+    public void RollUp() {
+      if (rolledUp_) {
+        rollUpLabel_.Visible = false;
+        this.Height = height_;
+        rolledUp_ = false;
+      } else {
+        Lock();
+        height_ = this.Height;
+        this.Height = this.Padding.Top;
+        rolledUp_ = true;
+        UpdateTitle();
+        rollUpLabel_.Width = this.Width;
+        rollUpLabel_.Font = new Font(this.SelectionFont.FontFamily, 8);
+        rollUpLabel_.ForeColor = textBox_.SelectionColor;
+        rollUpLabel_.Text = this.Text;
+        rollUpLabel_.Visible = true;
+      }
     }
 
     /// <summary>
@@ -188,6 +231,20 @@ namespace Stickies {
     /// title bar.
     /// </summary>
     private int OnNcHitTest(Point p) {
+      // Don't allow resizing while we are rolled up
+      if (rolledUp_) {
+        return WinUser.HTCAPTION;
+      }
+
+      // Make the bottom corners of the window a larger resize target
+      if (p.Y > this.Height - ResizeTargetSize) {
+        if (p.X < ResizeTargetSize) {
+          return WinUser.HTBOTTOMLEFT;
+        } else if (p.X > this.Width - ResizeTargetSize) {
+          return WinUser.HTBOTTOMRIGHT;
+        }
+      }
+
       if (p.Y < this.Padding.Top) {
         if (p.X < this.Padding.Left) {
           if (p.Y < this.Padding.Left) {
@@ -226,6 +283,17 @@ namespace Stickies {
     }
 
     /// <summary>
+    /// Unlocks or "rolls up" the note depending on where the user clicked it.
+    /// </summary>
+    private void OnNcDoubleClick(Point p) {
+      if (p.Y > this.Padding.Top) {
+        Unlock();
+      } else {
+        RollUp();
+      }
+    }
+
+    /// <summary>
     /// Capture the WM_NCHITTEST message and associated messages so we can make
     /// our borderless window draggable and resizable.
     /// </summary>
@@ -247,7 +315,7 @@ namespace Stickies {
           contextMenu_.Show(this, PointToClient(WinUser.LParamToPoint(m.LParam)));
           break;
         case WinUser.WM_NCLBUTTONDBLCLK:
-          Unlock();
+          OnNcDoubleClick(PointToClient(WinUser.LParamToPoint(m.LParam)));
           break;
         default:
           base.WndProc(ref m);
@@ -272,30 +340,21 @@ namespace Stickies {
     /// successfully.
     /// </summary>
     private bool ExportNote() {
-      UpdateTitle();
       // Set the default file name and strip illegal characters (but truncate
       // since long file names are useless). We cut off the string by maxing it
       // at 50 characters, and then we cut of the (likely truncated) word at
       // the end.
-      string fileName = this.Text;
+      UpdateTitle();
+      string fileName = this.Text.Trim();
       if (fileName.Length > 50) {
-        string[] parts = this.Text.Substring(0, 50).Split();
-        if (parts.Length > 0) {
+        fileName = fileName.Substring(0, 50).Trim();
+        string[] parts = fileName.Split();
+        if (parts.Length > 1) {
           fileName = String.Join(" ", parts, 0, Math.Max(parts.Length - 1, 1));
-        } else {
-          fileName = Messages.NoteNewStickyNote;
         }
       }
-      ArrayList illegalChars = new ArrayList();
-      illegalChars.AddRange(Path.GetInvalidFileNameChars());
-      illegalChars.Add(Path.PathSeparator);
-      illegalChars.Add(Path.VolumeSeparatorChar);
-      illegalChars.Add(Path.AltDirectorySeparatorChar);
-      illegalChars.Add(Path.DirectorySeparatorChar);
-      illegalChars.Add('*');
-      illegalChars.Add('?');
-      foreach (char illegal in illegalChars) {
-        fileName = fileName.Replace(new String(illegal, 1), "");
+      foreach (char illegal in Path.GetInvalidFileNameChars()) {
+        fileName = fileName.Replace(illegal, ' ');
       }
 
       // Add today's date to the file name
@@ -435,6 +494,9 @@ namespace Stickies {
         this.Unlock();
         textBox_.Focus();
       }
+      if (note_.RolledUp) {
+        RollUp();
+      }
     }
 
     private void archiveMenuItem__Click(object sender, EventArgs e) {
@@ -475,8 +537,10 @@ namespace Stickies {
       }
     }
 
-    // Returns the selection font of the text box, or the global font of the
-    // textbox if there is no text selected.
+    /// <summary>
+    /// Returns the selection font of the text box, or the global font of the
+    /// extbox if there is no text selected.
+    /// </summary>
     private Font SelectionFont {
       get {
         if (textBox_.SelectionFont != null) {

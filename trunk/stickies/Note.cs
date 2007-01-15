@@ -30,13 +30,13 @@ namespace Stickies {
     /// <summary>
     /// The width of this note in pixels.
     /// </summary>
-    [DefaultValue(175)]
+    [DefaultValue(160)]
     public int Width;
 
     /// <summary>
     /// The height of this note in pixels.
     /// </summary>
-    [DefaultValue(175)]
+    [DefaultValue(150)]
     public int Height;
 
     /// <summary>
@@ -86,6 +86,12 @@ namespace Stickies {
     /// </summary>
     [DefaultValue(false)]
     public bool AlwaysOnTop;
+
+    /// <summary>
+    /// True if the note is "rolled up."
+    /// </summary>
+    [DefaultValue(false)]
+    public bool RolledUp;
 
     /// <summary>
     /// Creates a new note without a GUID. This should only be used by the
