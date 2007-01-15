@@ -34,8 +34,9 @@ namespace Stickies {
       this.italicMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
       this.underlineMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
       this.strikethroughMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
-      this.textBox_ = new Stickies.NoteTextBox();
       this.saveFileDialog_ = new System.Windows.Forms.SaveFileDialog();
+      this.textBox_ = new Stickies.NoteTextBox();
+      this.rollUpLabel_ = new Stickies.TransparentLabel();
       toolStripMenuItem_ = new System.Windows.Forms.ToolStripSeparator();
       this.contextMenu_.SuspendLayout();
       this.SuspendLayout();
@@ -122,13 +123,23 @@ namespace Stickies {
       this.textBox_.ContextMenuStrip = this.contextMenu_;
       this.textBox_.Dock = System.Windows.Forms.DockStyle.Fill;
       this.textBox_.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-      this.textBox_.Location = new System.Drawing.Point(2, 11);
+      this.textBox_.Location = new System.Drawing.Point(2, 13);
       this.textBox_.Name = "textBox_";
-      this.textBox_.Size = new System.Drawing.Size(171, 162);
-      this.textBox_.TabIndex = 5;
+      this.textBox_.Size = new System.Drawing.Size(171, 160);
+      this.textBox_.TabIndex = 7;
       this.textBox_.Text = "";
       this.textBox_.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.textBox__LinkClicked);
       this.textBox_.SelectionChanged += new System.EventHandler(this.textBox__SelectionChanged);
+      this.textBox_.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox__KeyDown);
+      // 
+      // rollUpLabel_
+      // 
+      this.rollUpLabel_.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+      this.rollUpLabel_.Location = new System.Drawing.Point(0, 0);
+      this.rollUpLabel_.Name = "rollUpLabel_";
+      this.rollUpLabel_.Size = new System.Drawing.Size(153, 12);
+      this.rollUpLabel_.TabIndex = 8;
+      this.rollUpLabel_.Visible = false;
       // 
       // NoteForm
       // 
@@ -137,11 +148,12 @@ namespace Stickies {
       this.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (255)))), ((int) (((byte) (128)))));
       this.ClientSize = new System.Drawing.Size(175, 175);
       this.ContextMenuStrip = this.contextMenu_;
+      this.Controls.Add(this.rollUpLabel_);
       this.Controls.Add(this.textBox_);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
       this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
       this.Name = "NoteForm";
-      this.Padding = new System.Windows.Forms.Padding(2, 11, 2, 2);
+      this.Padding = new System.Windows.Forms.Padding(2, 13, 2, 2);
       this.ShowInTaskbar = false;
       this.Deactivate += new System.EventHandler(this.NoteForm_Deactivate);
       this.Resize += new System.EventHandler(this.MakeDirty);
@@ -158,12 +170,13 @@ namespace Stickies {
     private System.Windows.Forms.ContextMenuStrip contextMenu_;
     private System.Windows.Forms.ToolStripMenuItem preferencesMenuItem_;
     private System.Windows.Forms.ToolStripMenuItem deleteMenuItem_;
-    private NoteTextBox textBox_;
     private System.Windows.Forms.ToolStripMenuItem boldMenuItem_;
     private System.Windows.Forms.ToolStripMenuItem italicMenuItem_;
     private System.Windows.Forms.ToolStripMenuItem underlineMenuItem_;
     private System.Windows.Forms.ToolStripMenuItem archiveMenuItem_;
     private System.Windows.Forms.ToolStripMenuItem strikethroughMenuItem_;
     private System.Windows.Forms.SaveFileDialog saveFileDialog_;
+    private NoteTextBox textBox_;
+    private TransparentLabel rollUpLabel_;
   }
 }

@@ -47,10 +47,10 @@ namespace Stickies {
       }
     }
 
-    #region Win32 WM_NCHITTEST
-
-    // Capture the WM_NCHITTEST event to return HTTRANSPARENT when we are
-    // locked.
+    /// <summary>
+    /// Capture the WM_NCHITTEST event to return HTTRANSPARENT when we are
+    /// locked.
+    /// </summary>
     protected override void WndProc(ref Message m) {
       switch (m.Msg) {
         case WinUser.WM_NCHITTEST:
@@ -70,7 +70,5 @@ namespace Stickies {
           break;
       }
     }
-
-    #endregion
   }
 }
