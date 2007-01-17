@@ -67,9 +67,9 @@ namespace Stickies {
       fontLabel_.Text = Messages.PreferencesNoteFont;
       fontButton_.Text = Messages.PreferencesNoteChange;
       alwaysOnTopCheckBox_.Text = Messages.PreferencesNoteAlwaysOnTop;
-      transparencyLabel_.Text = Messages.PreferencesNoteTransparency;
       opaqueLabel_.Text = Messages.PreferencesNoteOpaque;
       invisibleLabel_.Text = Messages.PreferencesNoteInvisible;
+      UpdateTransparencyLabel();
 
       // Since slider bar controls do not support transparent backgrounds, this
       // is a hack to make our control display correctly in most forms by
@@ -80,6 +80,14 @@ namespace Stickies {
           break;
         }
       }
+    }
+
+    /// <summary>
+    /// Updates the transparency label, which shows the numerical transparency
+    /// of the transparency slider bar.
+    /// </summary>
+    private void UpdateTransparencyLabel() {
+      transparencyLabel_.Text = String.Format(Messages.PreferencesNoteTransparency, transparencyBar_.Value);
     }
 
     /// <summary>
@@ -200,6 +208,7 @@ namespace Stickies {
       if (NoteTransparencyChanged != null) {
         NoteTransparencyChanged();
       }
+      UpdateTransparencyLabel();
     }
 
     /// <summary>

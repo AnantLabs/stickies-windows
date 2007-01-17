@@ -448,7 +448,7 @@ namespace Stickies {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Transparency.
+        ///   Looks up a localized string similar to Transparency: {0}%.
         /// </summary>
         internal static string PreferencesNoteTransparency {
             get {
