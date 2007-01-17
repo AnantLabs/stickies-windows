@@ -35,10 +35,12 @@ namespace Stickies {
       this.underlineMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
       this.strikethroughMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
       this.saveFileDialog_ = new System.Windows.Forms.SaveFileDialog();
-      this.textBox_ = new Stickies.NoteTextBox();
       this.rollUpLabel_ = new Stickies.TransparentLabel();
+      this.textBoxPaddingPanel_ = new Stickies.TransparentPanel();
+      this.textBox_ = new Stickies.NoteTextBox();
       toolStripMenuItem_ = new System.Windows.Forms.ToolStripSeparator();
       this.contextMenu_.SuspendLayout();
+      this.textBoxPaddingPanel_.SuspendLayout();
       this.SuspendLayout();
       // 
       // toolStripMenuItem_
@@ -116,22 +118,6 @@ namespace Stickies {
       this.strikethroughMenuItem_.Text = "&Strikethrough";
       this.strikethroughMenuItem_.Click += new System.EventHandler(this.strikethroughMenuItem__Click);
       // 
-      // textBox_
-      // 
-      this.textBox_.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (255)))), ((int) (((byte) (192)))));
-      this.textBox_.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.textBox_.ContextMenuStrip = this.contextMenu_;
-      this.textBox_.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.textBox_.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-      this.textBox_.Location = new System.Drawing.Point(2, 13);
-      this.textBox_.Name = "textBox_";
-      this.textBox_.Size = new System.Drawing.Size(171, 160);
-      this.textBox_.TabIndex = 7;
-      this.textBox_.Text = "";
-      this.textBox_.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.textBox__LinkClicked);
-      this.textBox_.SelectionChanged += new System.EventHandler(this.textBox__SelectionChanged);
-      this.textBox_.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox__KeyDown);
-      // 
       // rollUpLabel_
       // 
       this.rollUpLabel_.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
@@ -139,21 +125,49 @@ namespace Stickies {
       this.rollUpLabel_.Name = "rollUpLabel_";
       this.rollUpLabel_.Size = new System.Drawing.Size(153, 12);
       this.rollUpLabel_.TabIndex = 8;
+      this.rollUpLabel_.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       this.rollUpLabel_.Visible = false;
+      // 
+      // textBoxPaddingPanel_
+      // 
+      this.textBoxPaddingPanel_.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (192)))), ((int) (((byte) (255)))), ((int) (((byte) (192)))));
+      this.textBoxPaddingPanel_.Controls.Add(this.textBox_);
+      this.textBoxPaddingPanel_.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.textBoxPaddingPanel_.Location = new System.Drawing.Point(1, 14);
+      this.textBoxPaddingPanel_.Name = "textBoxPaddingPanel_";
+      this.textBoxPaddingPanel_.Padding = new System.Windows.Forms.Padding(3);
+      this.textBoxPaddingPanel_.Size = new System.Drawing.Size(158, 135);
+      this.textBoxPaddingPanel_.TabIndex = 9;
+      // 
+      // textBox_
+      // 
+      this.textBox_.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (255)))), ((int) (((byte) (192)))));
+      this.textBox_.BorderStyle = System.Windows.Forms.BorderStyle.None;
+      this.textBox_.ContextMenuStrip = this.contextMenu_;
+      this.textBox_.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.textBox_.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+      this.textBox_.Location = new System.Drawing.Point(3, 3);
+      this.textBox_.Name = "textBox_";
+      this.textBox_.Size = new System.Drawing.Size(152, 129);
+      this.textBox_.TabIndex = 8;
+      this.textBox_.Text = "This is a test and it is good for some reason multiline is nice";
+      this.textBox_.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.textBox__LinkClicked);
+      this.textBox_.SelectionChanged += new System.EventHandler(this.textBox__SelectionChanged);
+      this.textBox_.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox__KeyDown);
       // 
       // NoteForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (255)))), ((int) (((byte) (128)))));
-      this.ClientSize = new System.Drawing.Size(175, 175);
+      this.ClientSize = new System.Drawing.Size(160, 150);
       this.ContextMenuStrip = this.contextMenu_;
+      this.Controls.Add(this.textBoxPaddingPanel_);
       this.Controls.Add(this.rollUpLabel_);
-      this.Controls.Add(this.textBox_);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
       this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
       this.Name = "NoteForm";
-      this.Padding = new System.Windows.Forms.Padding(2, 13, 2, 2);
+      this.Padding = new System.Windows.Forms.Padding(1, 14, 1, 1);
       this.ShowInTaskbar = false;
       this.Deactivate += new System.EventHandler(this.NoteForm_Deactivate);
       this.Resize += new System.EventHandler(this.MakeDirty);
@@ -161,6 +175,7 @@ namespace Stickies {
       this.BackColorChanged += new System.EventHandler(this.MakeDirty);
       this.Load += new System.EventHandler(this.NoteForm_Load);
       this.contextMenu_.ResumeLayout(false);
+      this.textBoxPaddingPanel_.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
@@ -176,7 +191,8 @@ namespace Stickies {
     private System.Windows.Forms.ToolStripMenuItem archiveMenuItem_;
     private System.Windows.Forms.ToolStripMenuItem strikethroughMenuItem_;
     private System.Windows.Forms.SaveFileDialog saveFileDialog_;
-    private NoteTextBox textBox_;
     private TransparentLabel rollUpLabel_;
+    private TransparentPanel textBoxPaddingPanel_;
+    private NoteTextBox textBox_;
   }
 }

@@ -47,10 +47,20 @@ namespace Stickies {
     private const int FadeTime = 300;
 
     /// <summary>
+    /// The size, in pixels, of the resize target on all sides of the note.
+    /// </summary>
+    private const int ResizeTargetSize = 4;
+
+    /// <summary>
+    /// The size, in pixels, of the resize target on the top of the note.
+    /// </summary>
+    private const int ResizeTopTargetSize = 2;
+
+    /// <summary>
     /// The size, in pixels, of the resize target in the bottom corners of the
     /// window.
     /// </summary>
-    private const int ResizeTargetSize = 10;
+    private const int ResizeCornerTargetSize = 10;
 
     /// <summary>
     /// True if we have changed since our last save to disk.
@@ -61,11 +71,6 @@ namespace Stickies {
     /// True if the user gave the fadeIn option in the constructor.
     /// </summary>
     private bool fadeIn_;
-
-    /// <summary>
-    /// True if this note is "rolled up."
-    /// </summary>
-    private bool rolledUp_;
 
     /// <summary>
     /// The height of this note before it was "rolled up."
@@ -97,6 +102,7 @@ namespace Stickies {
       this.Size = new Size(note.Width, note.Height);
       this.BackColor = Color.FromArgb(note.BorderColor);
       textBox_.BackColor = Color.FromArgb(note.BackColor);
+      textBoxPaddingPanel_.BackColor = textBox_.BackColor;
       textBox_.ForeColor = Color.FromArgb(note.FontColor);
       textBox_.Rtf = note.Rtf;
       this.TopMost = note.AlwaysOnTop;
@@ -139,14 +145,14 @@ namespace Stickies {
       note_.Left = this.Left;
       note_.Top = this.Top;
       note_.Width = this.Width;
-      note_.Height = rolledUp_ ? height_ : this.Height;
+      note_.Height = RolledUp ? height_ : this.Height;
       note_.Transparency = 1.0 - this.Opacity;
       note_.FontColor = textBox_.ForeColor.ToArgb();
       note_.BackColor = textBox_.BackColor.ToArgb();
       note_.BorderColor = this.BackColor.ToArgb();
       note_.AlwaysOnTop = this.TopMost;
       note_.Rtf = textBox_.Rtf;
-      note_.RolledUp = rolledUp_;
+      note_.RolledUp = RolledUp;
       try {
         note_.Save();
       } catch (Exception e) {
@@ -197,7 +203,7 @@ namespace Stickies {
     /// so users don't accidentally type content into a note they can't see.
     /// </summary>
     public void Unlock() {
-      if (!rolledUp_) {
+      if (!RolledUp) {
         textBox_.Locked = false;
       }
     }
@@ -207,20 +213,19 @@ namespace Stickies {
     /// already rolled up.
     /// </summary>
     public void RollUp() {
-      if (rolledUp_) {
+      if (RolledUp) {
         rollUpLabel_.Visible = false;
         this.Height = height_;
-        rolledUp_ = false;
       } else {
         Lock();
         height_ = this.Height;
-        this.Height = this.Padding.Top;
-        rolledUp_ = true;
         UpdateTitle();
         rollUpLabel_.Width = this.Width;
+        rollUpLabel_.Height = this.Padding.Top + this.Padding.Bottom;
         rollUpLabel_.Font = new Font(this.SelectionFont.FontFamily, 8);
         rollUpLabel_.ForeColor = textBox_.SelectionColor;
         rollUpLabel_.Text = this.Text;
+        this.Height = rollUpLabel_.Height;
         rollUpLabel_.Visible = true;
       }
     }
@@ -232,46 +237,46 @@ namespace Stickies {
     /// </summary>
     private int OnNcHitTest(Point p) {
       // Don't allow resizing while we are rolled up
-      if (rolledUp_) {
+      if (RolledUp) {
         return WinUser.HTCAPTION;
       }
 
       // Make the bottom corners of the window a larger resize target
-      if (p.Y > this.Height - ResizeTargetSize) {
-        if (p.X < ResizeTargetSize) {
+      if (p.Y > this.Height - ResizeCornerTargetSize) {
+        if (p.X < ResizeCornerTargetSize) {
           return WinUser.HTBOTTOMLEFT;
-        } else if (p.X > this.Width - ResizeTargetSize) {
+        } else if (p.X > this.Width - ResizeCornerTargetSize) {
           return WinUser.HTBOTTOMRIGHT;
         }
       }
 
       if (p.Y < this.Padding.Top) {
-        if (p.X < this.Padding.Left) {
-          if (p.Y < this.Padding.Left) {
+        if (p.X < ResizeTargetSize) {
+          if (p.Y < ResizeTargetSize) {
             return WinUser.HTTOPLEFT;
           } else {
             return WinUser.HTLEFT;
           }
-        } else if (p.X >= this.Width - this.Padding.Right) {
-          if (p.Y < this.Padding.Right) {
+        } else if (p.X >= this.Width - ResizeTargetSize) {
+          if (p.Y < ResizeTargetSize) {
             return WinUser.HTTOPRIGHT;
           } else {
             return WinUser.HTRIGHT;
           }
-        } else if (p.Y < this.Padding.Left) {
+        } else if (p.Y < ResizeTopTargetSize) {
           return WinUser.HTTOP;
         }
       } else {
-        if (p.Y < this.Height - this.Padding.Bottom) {
-          if (p.X < this.Padding.Left) {
+        if (p.Y < this.Height - ResizeTargetSize) {
+          if (p.X < ResizeTargetSize) {
             return WinUser.HTLEFT;
-          } else if (p.X >= this.Width - this.Padding.Right) {
+          } else if (p.X >= this.Width - ResizeTargetSize) {
             return WinUser.HTRIGHT;
           }
         } else {
-          if (p.X < this.Padding.Left) {
+          if (p.X < ResizeTargetSize) {
             return WinUser.HTBOTTOMLEFT;
-          } else if (p.X >= this.Width - this.Padding.Right) {
+          } else if (p.X >= this.Width - ResizeTargetSize) {
             return WinUser.HTBOTTOMRIGHT;
           } else {
             return WinUser.HTBOTTOM;
@@ -377,6 +382,29 @@ namespace Stickies {
     }
 
     /// <summary>
+    /// Returns the selection font of the text box, or the global font of the
+    /// extbox if there is no text selected.
+    /// </summary>
+    private Font SelectionFont {
+      get {
+        if (textBox_.SelectionFont != null) {
+          return textBox_.SelectionFont;
+        } else {
+          return textBox_.Font;
+        }
+      }
+    }
+
+    /// <summary>
+    /// True if this note is "rolled up" into the title bar.
+    /// </summary>
+    private bool RolledUp {
+      get {
+        return rollUpLabel_.Visible;
+      }
+    }
+
+    /// <summary>
     /// Deletes this note.
     /// </summary>
     private void deleteMenuItem__Click(object sender, EventArgs e) {
@@ -397,8 +425,8 @@ namespace Stickies {
     }
 
     /// <summary>
-    /// Unlock the note automatically when the user starts typing.  Escape
-    /// locks the note.
+    /// Unlock the note automatically when the user starts typing. Escape locks
+    /// the note.
     /// </summary>
     private void textBox__KeyDown(object sender, KeyEventArgs e) {
       if (e.KeyCode == Keys.Escape) {
@@ -449,30 +477,6 @@ namespace Stickies {
       }
     }
 
-    void settingsDialog__NoteTransparencyChanged() {
-      this.Opacity = 1.0 - settingsDialog_.PreferencesControl.NoteTransparency;
-    }
-
-    void settingsDialog__NoteFontColorChanged() {
-      textBox_.ForeColor = settingsDialog_.PreferencesControl.NoteFontColor;
-    }
-
-    void settingsDialog__NoteFontChanged() {
-      textBox_.Font = settingsDialog_.PreferencesControl.NoteFont;
-    }
-
-    void settingsDialog__NoteBorderColorChanged() {
-      this.BackColor = settingsDialog_.PreferencesControl.NoteBorderColor;
-    }
-
-    void settingsDialog__NoteBackgroundColorChanged() {
-      textBox_.BackColor = settingsDialog_.PreferencesControl.NoteBackgroundColor;
-    }
-
-    void settingsDialog__NoteAlwaysOnTopChanged() {
-      this.TopMost = settingsDialog_.PreferencesControl.NoteAlwaysOnTop;
-    }
-
     /// <summary>
     /// Fade in and focus the text box if it is empty for easy editing.
     /// </summary>
@@ -494,9 +498,36 @@ namespace Stickies {
         this.Unlock();
         textBox_.Focus();
       }
+
+      // Roll up the note if the saved note has the RolledUp bit
       if (note_.RolledUp) {
         RollUp();
       }
+    }
+
+    void settingsDialog__NoteTransparencyChanged() {
+      this.Opacity = 1.0 - settingsDialog_.PreferencesControl.NoteTransparency;
+    }
+
+    void settingsDialog__NoteFontColorChanged() {
+      textBox_.ForeColor = settingsDialog_.PreferencesControl.NoteFontColor;
+    }
+
+    void settingsDialog__NoteFontChanged() {
+      textBox_.Font = settingsDialog_.PreferencesControl.NoteFont;
+    }
+
+    void settingsDialog__NoteBorderColorChanged() {
+      this.BackColor = settingsDialog_.PreferencesControl.NoteBorderColor;
+    }
+
+    void settingsDialog__NoteBackgroundColorChanged() {
+      textBox_.BackColor = settingsDialog_.PreferencesControl.NoteBackgroundColor;
+      textBoxPaddingPanel_.BackColor = textBox_.BackColor;
+    }
+
+    void settingsDialog__NoteAlwaysOnTopChanged() {
+      this.TopMost = settingsDialog_.PreferencesControl.NoteAlwaysOnTop;
     }
 
     private void archiveMenuItem__Click(object sender, EventArgs e) {
@@ -534,20 +565,6 @@ namespace Stickies {
         System.Diagnostics.Process.Start(e.LinkText);
       } catch (Exception exception) {
         this.mainForm_.ShowError(exception.Message);
-      }
-    }
-
-    /// <summary>
-    /// Returns the selection font of the text box, or the global font of the
-    /// extbox if there is no text selected.
-    /// </summary>
-    private Font SelectionFont {
-      get {
-        if (textBox_.SelectionFont != null) {
-          return textBox_.SelectionFont;
-        } else {
-          return textBox_.Font;
-        }
       }
     }
   }
