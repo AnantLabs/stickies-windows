@@ -172,6 +172,12 @@
     <Compile Include="TransparentLabel.Designer.cs">
       <DependentUpon>TransparentLabel.cs</DependentUpon>
     </Compile>
+    <Compile Include="TransparentPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TransparentPanel.Designer.cs">
+      <DependentUpon>TransparentPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="UpdateChecker.cs" />
     <Compile Include="VersionInfo.cs" />
     <Compile Include="WinUser.cs" />

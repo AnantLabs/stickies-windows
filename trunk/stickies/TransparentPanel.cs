@@ -17,13 +17,13 @@ using System.Windows.Forms;
 
 namespace Stickies {
   /// <summary>
-  /// A Label that returns HTTTRANSPARENT for all WM_NCHITTEST events.
+  /// A Panel that returns HTTTRANSPARENT for all WM_NCHITTEST events.
   /// </summary>
-  public partial class TransparentLabel : Label {
-    public TransparentLabel() {
+  public partial class TransparentPanel : Panel {
+    public TransparentPanel() {
       InitializeComponent();
     }
-
+    
     /// <summary>
     /// Capture the WM_NCHITTEST event to return HTTRANSPARENT.
     /// </summary>
@@ -37,5 +37,6 @@ namespace Stickies {
           break;
       }
     }
+
   }
 }
