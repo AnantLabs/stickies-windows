@@ -33,6 +33,7 @@ namespace Stickies {
       this.notePreferencesControl_.Dock = System.Windows.Forms.DockStyle.Fill;
       this.notePreferencesControl_.Location = new System.Drawing.Point(10, 10);
       this.notePreferencesControl_.Name = "notePreferencesControl_";
+      this.notePreferencesControl_.NoteAlwaysOnTop = false;
       this.notePreferencesControl_.NoteBackgroundColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (255)))), ((int) (((byte) (192)))));
       this.notePreferencesControl_.NoteBorderColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (255)))), ((int) (((byte) (128)))));
       this.notePreferencesControl_.NoteFont = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));

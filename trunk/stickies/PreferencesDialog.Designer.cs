@@ -132,6 +132,7 @@ namespace Stickies {
       this.noteTextBox_.Name = "noteTextBox_";
       this.noteTextBox_.Size = new System.Drawing.Size(185, 177);
       this.noteTextBox_.TabIndex = 2;
+      this.noteTextBox_.Text = "";
       // 
       // iconCheckBox_
       // 
