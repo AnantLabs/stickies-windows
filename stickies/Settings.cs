@@ -29,10 +29,22 @@ namespace Stickies {
   /// </summary>
   public abstract class Settings {
     /// <summary>
-    /// The version of Stickies from which this set of Preferences was saved.
+    /// The version of Stickies from which this set of Settings was saved.
     /// </summary>
     [XmlAttribute("version")]
     public string Version;
+
+    /// <summary>
+    /// The time at which this set of Settings was created.
+    /// </summary>
+    [XmlAttribute("created")]
+    public DateTime Created;
+
+    /// <summary>
+    /// The time at which this set of Settings was last saved.
+    /// </summary>
+    [XmlAttribute("modified")]
+    public DateTime Modified;
 
     /// <summary>
     /// Initializes this Settings instance by copying over the default values
@@ -41,6 +53,8 @@ namespace Stickies {
     public Settings() {
       // Store the product version as the XML version
       this.Version = Application.ProductVersion;
+      this.Created = DateTime.Now;
+      this.Modified = this.Created;
 
       // Load the default values for all the fields so that this structure
       // will have the default values even if it is not loaded from disk
@@ -92,7 +106,14 @@ namespace Stickies {
       RecursiveCreateDirectory(new DirectoryInfo(SettingsDirectory()));
       using (Stream stream = File.Open(GetPath(), FileMode.Create, FileAccess.Write)) {
         XmlSerializer serializer = new XmlSerializer(this.GetType(), XmlNamespace);
-        serializer.Serialize(stream, this);
+        DateTime oldLastSaved = this.Modified;
+        this.Modified = DateTime.Now;
+        try {
+          serializer.Serialize(stream, this);
+        } catch (Exception) {
+          this.Modified = oldLastSaved;
+          throw;
+        }
       }
     }
 

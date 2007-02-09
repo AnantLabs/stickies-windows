@@ -107,7 +107,7 @@ namespace Stickies {
       this.closeButton_.Text = "Close";
       this.closeButton_.UseVisualStyleBackColor = true;
       // 
-      // AboutForm
+      // AboutDialog
       // 
       this.AcceptButton = this.linkLabel_;
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -124,7 +124,7 @@ namespace Stickies {
       this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
       this.MaximizeBox = false;
       this.MinimizeBox = false;
-      this.Name = "AboutForm";
+      this.Name = "AboutDialog";
       this.topPanel_.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize) (this.logoPictureBox_)).EndInit();
       this.ResumeLayout(false);

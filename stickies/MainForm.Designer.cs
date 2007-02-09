@@ -38,9 +38,9 @@ namespace Stickies
           this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
           this.preferencesMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
           this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+          this.reportBugMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
           this.aboutMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
           this.exitMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
-          this.reportBugMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
           this.contextMenu_.SuspendLayout();
           this.SuspendLayout();
           // 
@@ -66,7 +66,7 @@ namespace Stickies
             this.aboutMenuItem_,
             this.exitMenuItem_});
           this.contextMenu_.Name = "contextMenu_";
-          this.contextMenu_.Size = new System.Drawing.Size(162, 192);
+          this.contextMenu_.Size = new System.Drawing.Size(162, 170);
           // 
           // newNoteMenuItem_
           // 
@@ -106,6 +106,13 @@ namespace Stickies
           this.toolStripMenuItem1.Name = "toolStripMenuItem1";
           this.toolStripMenuItem1.Size = new System.Drawing.Size(158, 6);
           // 
+          // reportBugMenuItem_
+          // 
+          this.reportBugMenuItem_.Name = "reportBugMenuItem_";
+          this.reportBugMenuItem_.Size = new System.Drawing.Size(161, 22);
+          this.reportBugMenuItem_.Text = "Report a &Bug";
+          this.reportBugMenuItem_.Click += new System.EventHandler(this.reportBugMenuItem__Click);
+          // 
           // aboutMenuItem_
           // 
           this.aboutMenuItem_.Name = "aboutMenuItem_";
@@ -120,18 +127,12 @@ namespace Stickies
           this.exitMenuItem_.Text = "E&xit";
           this.exitMenuItem_.Click += new System.EventHandler(this.exitMenuItem__Click);
           // 
-          // reportBugMenuItem_
-          // 
-          this.reportBugMenuItem_.Name = "reportBugMenuItem_";
-          this.reportBugMenuItem_.Size = new System.Drawing.Size(161, 22);
-          this.reportBugMenuItem_.Text = "Report a &Bug";
-          this.reportBugMenuItem_.Click += new System.EventHandler(this.reportBugMenuItem__Click);
-          // 
           // MainForm
           // 
           this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
           this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
           this.ClientSize = new System.Drawing.Size(292, 266);
+          this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
           this.Name = "MainForm";
           this.contextMenu_.ResumeLayout(false);
           this.ResumeLayout(false);
