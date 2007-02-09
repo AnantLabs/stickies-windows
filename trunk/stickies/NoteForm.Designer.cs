@@ -154,6 +154,7 @@ namespace Stickies {
       this.textBox_.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.textBox__LinkClicked);
       this.textBox_.SelectionChanged += new System.EventHandler(this.textBox__SelectionChanged);
       this.textBox_.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox__KeyDown);
+      this.textBox_.TextChanged += new System.EventHandler(this.MakeDirty);
       // 
       // NoteForm
       // 
