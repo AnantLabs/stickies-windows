@@ -21,11 +21,11 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("A simple sticky notes application in the spirit of the classic Mac OS application.")]
 [assembly: AssemblyCompany("Bret Taylor")]
 [assembly: AssemblyProduct("Stickies")]
-[assembly: AssemblyCopyright("Copyright 2006 Bret Taylor")]
+[assembly: AssemblyCopyright("Copyright 2007 Bret Taylor")]
 
 // Version information for the application
-[assembly: AssemblyVersion("3.0.5")]
-[assembly: AssemblyFileVersion("3.0.5")]
+[assembly: AssemblyVersion("3.0.6")]
+[assembly: AssemblyFileVersion("3.0.6")]
 
 // We don't need our components visible from COM
 [assembly: ComVisible(false)]
