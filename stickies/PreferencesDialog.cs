@@ -13,6 +13,7 @@
 // under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -22,6 +23,12 @@ namespace Stickies {
   /// Stickies.
   /// </summary>
   public partial class PreferencesDialog : ContainedForm {
+    /// <summary>
+    /// We set this variable when the user sets or changes their synchronization
+    /// preferences.
+    /// </summary>
+    private SynchronizationSettings synchronizationSettings_;
+
     /// <summary>
     /// Creates a new preferences dialog, initializing our form based on the
     /// settings in the given Preferences instance.
@@ -62,10 +69,19 @@ namespace Stickies {
       iconBrowseButton_.Enabled = iconCheckBox_.Checked;
       startOnWindowsCheckBox_.Checked = Preferences.StartWithWindows();
 
+      synchronizationSettings_ = preferences.SynchronizeSettings;
+      if (synchronizationSettings_ != null) {
+        synchronizeCheckBox_.Checked = true;
+        amazonAccessKeyIdTextBox_.Text = synchronizationSettings_.AmazonAccessKeyId;
+        amazonSecretAccessKeyTextBox_.Text = synchronizationSettings_.AmazonSecretAccessKey;
+      }
+
       // Hack to make slider bar look right on top of the light colored
       // TabControl. The slider bar control does not support transparent
       // background colors.
       notePreferencesControl_.SliderBarBackColor = Color.FromArgb(244, 243, 239);
+
+      UpdateSynchronizationEnabled();
     }
 
     /// <summary>
@@ -85,10 +101,32 @@ namespace Stickies {
         preferences.TrayIconPath = iconTextBox_.Text;
       }
 
+      if (synchronizeCheckBox_.Checked && amazonAccessKeyIdTextBox_.Text.Length > 0 && amazonSecretAccessKeyTextBox_.Text.Length > 0) {
+        // Preserve the old synchronization (and LastSync timestamp) unless the
+        // Amazon key has changed.
+        if (synchronizationSettings_ != null && synchronizationSettings_.AmazonAccessKeyId == amazonAccessKeyIdTextBox_.Text && synchronizationSettings_.AmazonSecretAccessKey == amazonSecretAccessKeyTextBox_.Text) {
+          preferences.SynchronizeSettings = synchronizationSettings_;
+        } else {
+          preferences.SynchronizeSettings = new SynchronizationSettings(amazonAccessKeyIdTextBox_.Text, amazonSecretAccessKeyTextBox_.Text);
+        }
+      }
+
       // Save the font by deleting the text and saving the emtpy RTF
       noteTextBox_.Text = "";
       preferences.Note.Rtf = noteTextBox_.Rtf;
       return preferences;
+    }
+
+    /// <summary>
+    /// Updates the synchronization form, disabling all elements if the
+    /// checkbox option is not checked.
+    /// </summary>
+    private void UpdateSynchronizationEnabled() {
+      amazonAccessKeyIdTextBox_.Enabled = synchronizeCheckBox_.Checked;
+      amazonAccessKeyIdLabel_.Enabled = synchronizeCheckBox_.Checked;
+      amazonSecretAccessKeyTextBox_.Enabled = synchronizeCheckBox_.Checked;
+      amazonSecretAccessKeyLabel_.Enabled = synchronizeCheckBox_.Checked;
+      synchronizationButton_.Enabled = amazonAccessKeyIdTextBox_.Text.Length > 0 && amazonSecretAccessKeyTextBox_.Text.Length > 0;
     }
 
     private void notePreferencesControl__NoteBackgroundColorChanged() {
@@ -122,6 +160,33 @@ namespace Stickies {
 
     private void startOnWindowsCheckBox__CheckedChanged(object sender, EventArgs e) {
       Preferences.SetStartWithWindows(startOnWindowsCheckBox_.Checked);
+    }
+
+    private void EnableSynchronizationTest(object sender, EventArgs e) {
+      UpdateSynchronizationEnabled();
+    }
+
+    private void spreadsheetsCheckBox__CheckedChanged(object sender, EventArgs e) {
+      UpdateSynchronizationEnabled();
+    }
+
+    private void synchronizationButton__Click(object sender, EventArgs e) {
+      synchronizationErrorLabel_.Text = "";
+      TestSynchronizationOperation operation = new TestSynchronizationOperation(new SynchronizationSettings(amazonAccessKeyIdTextBox_.Text, amazonSecretAccessKeyTextBox_.Text));
+      NetworkActivityDialog dialog = new NetworkActivityDialog(Messages.SynchronizationTesting, operation);
+      if (dialog.ShowDialog(this) == DialogResult.OK) {
+        if (operation.Exception != null) {
+          synchronizationErrorLabel_.Text = operation.Exception.Message;
+          synchronizationErrorLabel_.ForeColor = Color.DarkRed;
+        } else {
+          synchronizationErrorLabel_.Text = Messages.SynchronizationTestSuccess;
+          synchronizationErrorLabel_.ForeColor = SystemColors.ControlText;
+        }
+      }
+    }
+
+    private void signUpLinkLabel__LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+      System.Diagnostics.Process.Start(String.Format(Messages.SynchronizationInformationUrl, Application.ProductVersion));
     }
   }
 }

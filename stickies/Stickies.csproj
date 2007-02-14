@@ -56,8 +56,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -68,9 +68,14 @@
     <Compile Include="AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="AmazonS3.cs" />
+    <Compile Include="AmazonS3Operation.cs">
+    </Compile>
+    <Compile Include="TestSynchronizationOperation.cs" />
     <Compile Include="ContainedForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SynchronizationSettings.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,6 +87,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
+    <Compile Include="NetworkActivityDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NetworkActivityDialog.Designer.cs">
+      <DependentUpon>NetworkActivityDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NetworkOperation.cs" />
     <Compile Include="Note.cs" />
     <Compile Include="NoteForm.cs">
       <SubType>Form</SubType>
@@ -129,6 +141,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="NetworkActivityDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>NetworkActivityDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="NoteForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>NoteForm.cs</DependentUpon>
@@ -166,6 +182,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Settings.cs" />
+    <Compile Include="SynchronizeNotesOperation.cs" />
     <Compile Include="TransparentLabel.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -53,7 +53,7 @@ namespace Stickies {
     public Settings() {
       // Store the product version as the XML version
       this.Version = Application.ProductVersion;
-      this.Created = DateTime.Now;
+      this.Created = DateTime.UtcNow;
       this.Modified = this.Created;
 
       // Load the default values for all the fields so that this structure
@@ -97,24 +97,37 @@ namespace Stickies {
     /// we save to when the Save() method is called.
     /// </summary>
     public abstract string GetPath();
-
+    
     /// <summary>
     /// Saves this Settings struct to the path returned by GetPath().
     /// </summary>
     public void Save() {
+      Save(true);
+    }
+
+    /// <summary>
+    /// Saves this Settings struct to the path returned by GetPath().
+    /// </summary>
+    public void Save(bool updateLastModified) {
       System.Diagnostics.Debug.WriteLine("Saving " + GetPath());
       RecursiveCreateDirectory(new DirectoryInfo(SettingsDirectory()));
       using (Stream stream = File.Open(GetPath(), FileMode.Create, FileAccess.Write)) {
-        XmlSerializer serializer = new XmlSerializer(this.GetType(), XmlNamespace);
         DateTime oldLastSaved = this.Modified;
-        this.Modified = DateTime.Now;
+        if (updateLastModified) {
+          this.Modified = DateTime.UtcNow;
+        }
         try {
+          XmlSerializer serializer = GetSerializer();
           serializer.Serialize(stream, this);
         } catch (Exception) {
           this.Modified = oldLastSaved;
           throw;
         }
       }
+    }
+
+    public XmlSerializer GetSerializer() {
+      return new XmlSerializer(this.GetType(), XmlNamespace);
     }
 
     /// <summary>
