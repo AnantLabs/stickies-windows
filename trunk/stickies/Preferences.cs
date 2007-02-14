@@ -35,6 +35,11 @@ namespace Stickies {
     public string TrayIconPath;
 
     /// <summary>
+    /// The Google Spreadsheet in which we store the Sticky notes.
+    /// </summary>
+    public SynchronizationSettings SynchronizeSettings;
+
+    /// <summary>
     /// The Windows registry location that lists the applications that start
     /// automatically when Windows starts.
     /// </summary>

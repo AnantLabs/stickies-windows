@@ -117,71 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="synchronizeGroupBox_.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
-  <data name="synchronizationDescriptionLabel_.Text" xml:space="preserve">
-    <value>Stickies lets you synchronize your notes between computers by storing notes securely on Amazon.com's web servers. You need to sign up for this Amazon service and enter your Amazon keys to enable the feature.</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        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
-</value>
-  </data>
-  <metadata name="iconFileDialog_.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAA0AMDAQAAEABABoBgAA1gAAACAgEAABAAQA6AIAAD4HAAAYGBAAAQAEAOgBAAAmCgAAEBAQAAEA

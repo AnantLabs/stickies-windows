@@ -77,6 +77,12 @@ namespace Stickies {
     public const int WM_STICKIES_QUIT = WinUser.WM_USER + 2;
 
     /// <summary>
+    /// Our online synchronization operation. We store it globally because
+    /// we only run one synchronization at a time.
+    /// </summary>
+    private SynchronizeNotesOperation synchronizer_ = null;
+
+    /// <summary>
     /// Load our preferences from disk, set up our tray icon, and load all of
     /// our notes from disk. Send an asynchronous request to check for newer
     /// versions of the product in parallel.
@@ -115,6 +121,10 @@ namespace Stickies {
       // Check for new versions of Stickies
       UpdateChecker checker = new UpdateChecker(GetVersionCheckURL(), new UpdateChecker.Callback(OnUpdateCheck));
       checker.Run();
+
+      // Start the synchronization timer and do one initial synchronization
+      synchronizationTimer_.Start();
+      SynchronizeOnlineNotes(false);
     }
 
     /// <summary>
@@ -248,6 +258,7 @@ namespace Stickies {
     private void UpdateMenus() {
       deleteAllNotesMenuItem_.Enabled = noteForms_.Count > 0;
       showAllNotesMenuItem_.Enabled = noteForms_.Count > 0;
+      synchronizeMenuItem_.Enabled = preferences_.SynchronizeSettings != null;
     }
 
     /// <summary>
@@ -299,10 +310,102 @@ namespace Stickies {
     /// If the version on the server is different than our version, show the
     /// update message.
     /// </summary>
-    /// <param name="versionInfo"></param>
     private void OnUpdateCheck(VersionInfo versionInfo) {
       if (versionInfo.CurrentVersion != Application.ProductVersion) {
         ShowMessage(versionInfo.UpdateMessage, versionInfo.UpdateUrl);
+      }
+    }
+
+    /// <summary>
+    /// Synchronizes the notes with the online data store.
+    /// </summary>
+    private void SynchronizeOnlineNotes(bool showUserInterface) {
+      if (synchronizer_ != null) return;
+      if (preferences_.SynchronizeSettings == null) return;
+
+      // Load the note objects from the note forms
+      List<Note> notes = new List<Note>();
+      foreach (NoteForm form in noteForms_) {
+        // TODO: Copy note to avoid synchronization problems
+        notes.Add(form.Note);
+      }
+
+      // Synchronize the notes with or without a user interface
+      synchronizer_ = new SynchronizeNotesOperation(preferences_.SynchronizeSettings, notes);
+      if (showUserInterface) {
+        NetworkActivityDialog dialog = new NetworkActivityDialog(Messages.SynchronizationProgress, synchronizer_);
+        dialog.StartPosition = FormStartPosition.Manual;
+        dialog.Location = Control.MousePosition;
+        if (dialog.ShowDialog() == DialogResult.OK) {
+          OnSynchronizeNotesComplete(true);
+        } else {
+          synchronizer_ = null;
+        }
+      } else {
+        synchronizer_.RunAsynchronously(this, new System.Threading.ThreadStart(this.OnSynchronizeNotesComplete));
+      }
+    }
+
+    /// <summary>
+    /// Called when the note synchronization thread completes.
+    /// </summary>
+    private void OnSynchronizeNotesComplete() {
+      OnSynchronizeNotesComplete(false);
+    }
+
+    /// <summary>
+    /// Called when the note synchronization thread completes.
+    /// </summary>
+    private void OnSynchronizeNotesComplete(bool showUserInterface) {
+      try {
+        if (synchronizer_.Exception != null) {
+          // Only show a network exception if we are doing a non-passive
+          // operation (as opposed to our timer-based passive synchronization).
+          // Otherwise, we would end up showing a bunch of exceptions when the
+          // computer is not connected to the net.
+          if (synchronizer_.Exception is System.Net.WebException && !showUserInterface) {
+            return;
+          }
+          Debug.WriteLine(synchronizer_.Exception.Message);
+          ShowError(String.Format(Messages.SynchronizationError, synchronizer_.Exception.Message));
+          return;
+        }
+
+        // Load new notes and reload modified notes
+        bool newNotesFound = false;
+        foreach (Note note in synchronizer_.Notes) {
+          bool skip = false;
+          foreach (NoteForm form in noteForms_) {
+            if (form.Note.Guid == note.Guid) {
+              if (form.Note.Modified >= note.Modified) {
+                skip = true;
+              } else {
+                // Replace this note with a new note. Since the note has the
+                // same GUID, it will have the same path.
+                form.Delete();
+              }
+              break;
+            }
+          }
+          if (skip) continue;
+          newNotesFound = true;
+          ShowNote(new NoteForm(this, note, false));
+          note.Save(false);
+        }
+
+        // Update our last sync time
+        if (preferences_.SynchronizeSettings != null) {
+          preferences_.SynchronizeSettings.LastSync = DateTime.UtcNow;
+          preferences_.Save();
+        }
+
+        if (newNotesFound) {
+          ShowMessage(Messages.SynchronizationNotesUpdated);
+        }
+      } catch (Exception e) {
+        ShowError(String.Format(Messages.SynchronizationError, e.Message));
+      } finally {
+        synchronizer_ = null;
       }
     }
 
@@ -326,7 +429,6 @@ namespace Stickies {
     /// <summary>
     /// Handle our global Windows hot key.
     /// </summary>
-    /// <param name="m"></param>
     protected override void WndProc(ref Message m) {
       switch (m.Msg) {
         case WinUser.WM_HOTKEY:
@@ -378,6 +480,7 @@ namespace Stickies {
       } else {
         preferencesDialog_ = new PreferencesDialog(preferences_);
         if (preferencesDialog_.ShowDialog(this) == DialogResult.OK) {
+          bool wasSynchronized = (preferences_.SynchronizeSettings != null);
           preferences_ = preferencesDialog_.GetPreferences();
           try {
             preferences_.Save();
@@ -385,6 +488,10 @@ namespace Stickies {
             ShowError(String.Format(Messages.ErrorPreferencesSave, ex.Message));
           }
           ReloadPreferences();
+          UpdateMenus();
+          if (!wasSynchronized && preferences_.SynchronizeSettings != null) {
+            SynchronizeOnlineNotes(false);
+          }
         }
       }
     }
@@ -451,6 +558,14 @@ namespace Stickies {
       } catch (Exception exception) {
         ShowError(exception.Message);
       }
+    }
+
+    private void synchronizeMenuItem__Click(object sender, EventArgs e) {
+      SynchronizeOnlineNotes(true);
+    }
+
+    private void synchronizationTimer__Tick(object sender, EventArgs e) {
+      SynchronizeOnlineNotes(false);
     }
   }
 }

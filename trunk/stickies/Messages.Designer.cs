@@ -502,6 +502,60 @@ namespace Stickies {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was an error synchronizing your notes with Amazon S3. {0}..
+        /// </summary>
+        internal static string SynchronizationError {
+            get {
+                return ResourceManager.GetString("SynchronizationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://www.stickiesforwindows.com/synchronization?v={0}.
+        /// </summary>
+        internal static string SynchronizationInformationUrl {
+            get {
+                return ResourceManager.GetString("SynchronizationInformationUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your notes have been updated with changes stored in Amazon S3..
+        /// </summary>
+        internal static string SynchronizationNotesUpdated {
+            get {
+                return ResourceManager.GetString("SynchronizationNotesUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronizing notes....
+        /// </summary>
+        internal static string SynchronizationProgress {
+            get {
+                return ResourceManager.GetString("SynchronizationProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Testing Amazon S3 credentials....
+        /// </summary>
+        internal static string SynchronizationTesting {
+            get {
+                return ResourceManager.GetString("SynchronizationTesting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings are correct!.
+        /// </summary>
+        internal static string SynchronizationTestSuccess {
+            get {
+                return ResourceManager.GetString("SynchronizationTestSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to http://www.stickiesforwindows.com/checkupgrade?v={0}.
         /// </summary>
         internal static string UpdateCheckUrl {

@@ -505,6 +505,12 @@ namespace Stickies {
       }
     }
 
+    public Note Note {
+      get {
+        return note_;
+      }
+    }
+
     void settingsDialog__NoteTransparencyChanged() {
       this.Opacity = 1.0 - settingsDialog_.PreferencesControl.NoteTransparency;
     }

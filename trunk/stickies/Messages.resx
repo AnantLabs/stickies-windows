@@ -312,6 +312,30 @@
     <value>http://code.google.com/p/stickies-windows/issues/entry</value>
     <comment>The URL users should visit to report a bug in the application</comment>
   </data>
+  <data name="SynchronizationError" xml:space="preserve">
+    <value>There was an error synchronizing your notes with Amazon S3. {0}.</value>
+    <comment>Message shown to the user when synchronization fails.</comment>
+  </data>
+  <data name="SynchronizationInformationUrl" xml:space="preserve">
+    <value>http://www.stickiesforwindows.com/synchronization?v={0}</value>
+    <comment>URL we redirect the user to for more information about synchronization</comment>
+  </data>
+  <data name="SynchronizationNotesUpdated" xml:space="preserve">
+    <value>Your notes have been updated with changes stored in Amazon S3.</value>
+    <comment>Shown when we download new or updated notes from the synchronization server.</comment>
+  </data>
+  <data name="SynchronizationProgress" xml:space="preserve">
+    <value>Synchronizing notes...</value>
+    <comment>Progress message when we are synchronizing notes</comment>
+  </data>
+  <data name="SynchronizationTesting" xml:space="preserve">
+    <value>Testing Amazon S3 credentials...</value>
+    <comment>Progress message when we test synchronization settings</comment>
+  </data>
+  <data name="SynchronizationTestSuccess" xml:space="preserve">
+    <value>Settings are correct!</value>
+    <comment>Success message if synchronization test completes successfully.</comment>
+  </data>
   <data name="UpdateCheckUrl" xml:space="preserve">
     <value>http://www.stickiesforwindows.com/checkupgrade?v={0}</value>
     <comment>The URL we use to check for new versions of Stickies.</comment>
