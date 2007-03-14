@@ -231,14 +231,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Stickies"
-        "ProductCode" = "8:{A2AB953E-2A80-4273-A16F-3DE6BD20FA80}"
-        "PackageCode" = "8:{7130CC75-CCA2-439C-8B0F-7A6E9A3E657B}"
+        "ProductCode" = "8:{0A770EE2-905F-4DBD-8963-2E4F0FAFD66F}"
+        "PackageCode" = "8:{4A64110F-597F-47EC-9BEE-2DC656423FA0}"
         "UpgradeCode" = "8:{6D6B55FD-760B-4648-9D2E-D10453E23ACF}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:3.0.6"
+        "ProductVersion" = "8:3.0.7"
         "Manufacturer" = "8:Bret Taylor"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.stickiesforwindows.com/"
@@ -609,7 +609,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_476A47403BA141A492C2819F1AC033E7"
             {
-            "SourcePath" = "8:..\\StickiesCustomActions\\obj\\Release\\StickiesCustomActions.dll"
+            "SourcePath" = "8:CustomActions\\obj\\Release\\StickiesCustomActions.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B109C5EC167E4BF08104E581F213F68C"
@@ -637,7 +637,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6FBC5B5E75D24CF6BBBDEC0052E3AC86"
             {
-            "SourcePath" = "8:..\\Stickies\\obj\\Release\\Stickies.exe"
+            "SourcePath" = "8:..\\Application\\obj\\Release\\Stickies.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B109C5EC167E4BF08104E581F213F68C"

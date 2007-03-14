@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Stickies.Properties {
+namespace Stickies {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Stickies.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "2.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class Media {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Media() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Stickies.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Stickies.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Stickies.Media", typeof(Media).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,13 @@ namespace Stickies.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        internal static System.Drawing.Icon StickiesIcon {
+            get {
+                object obj = ResourceManager.GetObject("StickiesIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

@@ -37,6 +37,7 @@ namespace Stickies {
     public NoteSettingsDialog(NoteForm noteForm) {
       noteForm_ = noteForm;
       InitializeComponent();
+      this.Icon = Media.StickiesIcon;
       this.Text = Messages.NoteSettingsTitle;
       this.StartPosition = FormStartPosition.Manual;
       this.Location = DeterminePosition();

@@ -35,6 +35,7 @@ namespace Stickies {
     /// </summary>
     public PreferencesDialog(Preferences preferences) {
       InitializeComponent();
+      this.Icon = Media.StickiesIcon;
       this.Text = String.Format(Messages.PreferencesTitle, Application.ProductName);
       saveButton_.Text = Messages.PreferencesSave;
       cancelButton_.Text = Messages.PreferencesCancel;

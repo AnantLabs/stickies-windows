@@ -89,6 +89,7 @@ namespace Stickies {
       note_ = note;
       fadeIn_ = fadeIn;
       InitializeComponent();
+      this.Icon = Media.StickiesIcon;
       preferencesMenuItem_.Text = Messages.NotePreferences;
       deleteMenuItem_.Text = Messages.NoteDelete;
       archiveMenuItem_.Text = Messages.NoteArchive;

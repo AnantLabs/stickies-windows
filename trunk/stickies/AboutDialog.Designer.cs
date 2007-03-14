@@ -121,7 +121,6 @@ namespace Stickies {
       this.Controls.Add(this.versionLabel_);
       this.Controls.Add(this.topPanel_);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-      this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
       this.MaximizeBox = false;
       this.MinimizeBox = false;
       this.Name = "AboutDialog";
