@@ -23,10 +23,11 @@ namespace Stickies {
   public partial class AboutDialog : ContainedForm {
     public AboutDialog() {
       InitializeComponent();
+      this.Icon = Media.StickiesIcon;
       this.Text = String.Format(Messages.AboutTitle, Application.ProductName);
       closeButton_.Text = Messages.AboutClose;
       versionLabel_.Text = String.Format(Messages.AboutVersion, Application.ProductVersion);
-      authorLabel_.Text = Messages.AboutAuthor;
+      authorLabel_.Text = String.Format(Messages.AboutCopyright, DateTime.Now.Year);
       licenseLabel_.Text = Messages.AboutLicense;
       linkLabel_.Text = Messages.AboutLink;
 

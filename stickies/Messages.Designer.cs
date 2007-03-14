@@ -61,20 +61,20 @@ namespace Stickies {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Written by Bret Taylor (btaylor@gmail.com)..
-        /// </summary>
-        internal static string AboutAuthor {
-            get {
-                return ResourceManager.GetString("AboutAuthor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         internal static string AboutClose {
             get {
                 return ResourceManager.GetString("AboutClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copyright ©2002-{0} Bret Taylor (btaylor@gmail.com)..
+        /// </summary>
+        internal static string AboutCopyright {
+            get {
+                return ResourceManager.GetString("AboutCopyright", resourceCulture);
             }
         }
         

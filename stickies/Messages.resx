@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutAuthor" xml:space="preserve">
-    <value>Written by Bret Taylor (btaylor@gmail.com).</value>
-    <comment>Written by text in the About form.</comment>
-  </data>
   <data name="AboutClose" xml:space="preserve">
     <value>Close</value>
     <comment>Close button in the About form.</comment>
+  </data>
+  <data name="AboutCopyright" xml:space="preserve">
+    <value>Copyright ©2002-{0} Bret Taylor (btaylor@gmail.com).</value>
+    <comment>Written by text in the About form.</comment>
   </data>
   <data name="AboutLicense" xml:space="preserve">
     <value>Licensed under the Apache 2.0 open source license.</value>

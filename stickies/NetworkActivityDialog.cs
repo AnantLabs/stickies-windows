@@ -24,6 +24,7 @@ namespace Stickies {
     public NetworkActivityDialog(string message, NetworkOperation operation) {
       operation_ = operation;
       InitializeComponent();
+      this.Icon = Media.StickiesIcon;
       this.Text = Application.ProductName;
       infoLabel_.Text = message;
     }

@@ -25,7 +25,6 @@ namespace Stickies {
     private void InitializeComponent() {
       this.components = new System.ComponentModel.Container();
       System.Windows.Forms.ToolStripSeparator toolStripMenuItem_;
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NoteForm));
       this.deleteMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
       this.preferencesMenuItem_ = new System.Windows.Forms.ToolStripMenuItem();
       this.contextMenu_ = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -166,7 +165,6 @@ namespace Stickies {
       this.Controls.Add(this.textBoxPaddingPanel_);
       this.Controls.Add(this.rollUpLabel_);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-      this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
       this.Name = "NoteForm";
       this.Padding = new System.Windows.Forms.Padding(1, 14, 1, 1);
       this.ShowInTaskbar = false;

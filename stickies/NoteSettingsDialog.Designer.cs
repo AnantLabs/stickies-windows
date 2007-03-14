@@ -23,7 +23,6 @@ namespace Stickies {
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent() {
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NoteSettingsDialog));
       this.notePreferencesControl_ = new Stickies.NotePreferencesControl();
       this.SuspendLayout();
       // 
@@ -50,7 +49,6 @@ namespace Stickies {
       this.ClientSize = new System.Drawing.Size(210, 194);
       this.Controls.Add(this.notePreferencesControl_);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-      this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
       this.MaximizeBox = false;
       this.MinimizeBox = false;
       this.Name = "NoteSettingsDialog";
